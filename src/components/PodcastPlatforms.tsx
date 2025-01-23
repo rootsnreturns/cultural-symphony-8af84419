@@ -26,11 +26,6 @@ const PodcastPlatforms = () => {
       name: "YouTube",
       url: "https://youtube.com",
       icon: "/lovable-uploads/a3aed2a2-0c7e-4031-8df8-1547667d8dc6.png"
-    },
-    {
-      name: "Audible",
-      url: "https://audible.com",
-      icon: "/lovable-uploads/0d377d1f-5770-4576-b731-9893739cf816.png"
     }
   ];
 
@@ -40,7 +35,7 @@ const PodcastPlatforms = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">
           Listen on Your Favorite Platform
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {platforms.map((platform) => (
             <Button
               key={platform.name}
