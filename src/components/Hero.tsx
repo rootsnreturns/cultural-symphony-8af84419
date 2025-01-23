@@ -7,8 +7,8 @@ const Hero = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40 z-10" />
         <img
-          src="https://images.unsplash.com/photo-1493962853295-0fd70327578a"
-          alt="African landscape"
+          src="/lovable-uploads/086ff8ab-83b0-4cd9-b22b-961374220df8.png"
+          alt="Futuristic African cityscape at sunset"
           className="w-full h-full object-cover"
         />
       </div>
@@ -17,7 +17,7 @@ const Hero = () => {
         <img
           src="/lovable-uploads/320eb689-382c-470c-a417-cc4f08f72284.png"
           alt="Roots N Returns Logo"
-          className="w-48 h-48 mx-auto mb-8 animate-float"
+          className="w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 mx-auto mb-8 animate-float"
         />
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
           Stories of Transformation from Africa and Beyond
