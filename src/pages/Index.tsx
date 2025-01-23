@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import FeaturedEpisodes from "@/components/FeaturedEpisodes";
+import NewsletterSubscribe from "@/components/NewsletterSubscribe";
 
 const Index = () => {
   return (
@@ -8,6 +9,7 @@ const Index = () => {
       <Hero />
       <About />
       <FeaturedEpisodes />
+      <NewsletterSubscribe />
     </main>
   );
 };
