@@ -12,7 +12,7 @@ const About = () => {
             alt="African connectivity map"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-secondary via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/80 to-transparent" />
         </div>
       </div>
     </section>
