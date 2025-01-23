@@ -1,42 +1,47 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { supabase } from "@/integrations/supabase/client";
 
 const About = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState(localStorage.getItem('mapbox_token') || '');
-  const [showMap, setShowMap] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
-  const initializeMap = () => {
-    if (!mapContainer.current || !mapboxToken) return;
+  const initializeMap = async () => {
+    try {
+      if (!mapContainer.current) return;
 
-    mapboxgl.accessToken = mapboxToken;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/dark-v11",
-      center: [0, 0],
-      zoom: 2,
-    });
+      const { data, error } = await supabase.functions.invoke('get-mapbox-token');
+      
+      if (error) {
+        throw new Error('Failed to fetch Mapbox token');
+      }
 
-    return () => {
-      map.current?.remove();
-    };
-  };
+      const { token } = data as { token: string };
+      mapboxgl.accessToken = token;
+      
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/dark-v11",
+        center: [0, 20], // Centered more on Africa
+        zoom: 2,
+      });
 
-  const handleTokenSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    localStorage.setItem('mapbox_token', mapboxToken);
-    setShowMap(true);
-    initializeMap();
+      // Add navigation controls
+      map.current.addControl(new mapboxgl.NavigationControl());
+
+    } catch (error) {
+      console.error('Error initializing map:', error);
+      setMapError('Failed to load the map. Please try again later.');
+    }
   };
 
   useEffect(() => {
-    if (mapboxToken && !map.current) {
-      setShowMap(true);
-      initializeMap();
-    }
+    initializeMap();
+    return () => {
+      map.current?.remove();
+    };
   }, []);
 
   return (
@@ -46,42 +51,8 @@ const About = () => {
         <p className="text-lg text-gray-300 mb-12 max-w-3xl mx-auto text-center">
           Roots N Returns is more than just a podcast - it's a bridge connecting African innovation, culture, and success stories with the global diaspora. Through meaningful conversations, we explore the journeys of those making an impact across continents.
         </p>
-        {!showMap ? (
-          <div className="max-w-md mx-auto mb-8">
-            <form onSubmit={handleTokenSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="mapbox-token" className="block text-white mb-2">
-                  Enter your Mapbox Token to view the map
-                </label>
-                <input
-                  id="mapbox-token"
-                  type="text"
-                  value={mapboxToken}
-                  onChange={(e) => setMapboxToken(e.target.value)}
-                  placeholder="pk.eyJ1..."
-                  className="w-full p-2 rounded border border-gray-300 bg-white text-black"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary/90 transition-colors"
-              >
-                Load Map
-              </button>
-            </form>
-            <p className="text-sm text-gray-400 mt-2">
-              Get your token from{" "}
-              <a
-                href="https://www.mapbox.com/account/access-tokens"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:underline"
-              >
-                Mapbox Dashboard
-              </a>
-            </p>
-          </div>
+        {mapError ? (
+          <div className="text-red-500 text-center mb-8">{mapError}</div>
         ) : (
           <div className="relative h-[400px] md:h-[600px] rounded-lg overflow-hidden">
             <div ref={mapContainer} className="absolute inset-0" />
