@@ -2,6 +2,27 @@ import { Button } from "@/components/ui/button";
 import { Headphones, Share2, Target } from "lucide-react";
 
 const GetInvolved = () => {
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      role: "Community Member",
+      quote: "Being part of Roots N Returns has opened my eyes to the incredible innovations happening across Africa. It's more than just a podcast - it's a movement.",
+      image: "/lovable-uploads/320eb689-382c-470c-a417-cc4f08f72284.png"
+    },
+    {
+      name: "David Okonjo",
+      role: "Tech Entrepreneur",
+      quote: "Through this platform, I've connected with other African entrepreneurs and found invaluable partnerships. The impact is real and lasting.",
+      image: "/lovable-uploads/0d377d1f-5770-4576-b731-9893739cf816.png"
+    },
+    {
+      name: "Maya Patel",
+      role: "Diaspora Advocate",
+      quote: "The stories shared here have inspired me to reconnect with my roots and contribute to Africa's growth story. It's truly transformative.",
+      image: "/lovable-uploads/a3aed2a2-0c7e-4031-8df8-1547667d8dc6.png"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-black pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -36,7 +57,7 @@ const GetInvolved = () => {
           </div>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-8 mb-20">
           <div className="bg-primary/10 p-8 rounded-lg">
             <h2 className="text-3xl font-bold text-white mb-4">Donate</h2>
             <p className="text-gray-300 mb-6">Support initiatives discussed on the podcast and help create lasting impact.</p>
@@ -51,6 +72,29 @@ const GetInvolved = () => {
             <Button size="lg" variant="secondary" className="w-full">
               Contact Us
             </Button>
+          </div>
+        </div>
+
+        {/* Testimonials Section */}
+        <div className="py-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
+            Community Voices
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="bg-secondary/10 p-6 rounded-lg flex flex-col items-center text-center">
+                <div className="w-24 h-24 rounded-full overflow-hidden mb-6">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <p className="text-gray-300 mb-6 italic">"{testimonial.quote}"</p>
+                <h3 className="text-white font-semibold">{testimonial.name}</h3>
+                <p className="text-primary text-sm">{testimonial.role}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
