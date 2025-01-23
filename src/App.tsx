@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import MeetTheHost from "./pages/MeetTheHost";
 import ImpactStories from "./pages/ImpactStories";
 import GetInvolved from "./pages/GetInvolved";
+import Episodes from "./pages/Episodes";
+import EpisodeDetails from "./pages/EpisodeDetails";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
@@ -24,6 +26,8 @@ const App = () => (
           <Route path="/meet-the-host" element={<MeetTheHost />} />
           <Route path="/impact-stories" element={<ImpactStories />} />
           <Route path="/get-involved" element={<GetInvolved />} />
+          <Route path="/episodes" element={<Episodes />} />
+          <Route path="/episodes/:id" element={<EpisodeDetails />} />
         </Routes>
         <Footer />
       </BrowserRouter>
