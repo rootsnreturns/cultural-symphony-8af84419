@@ -8,7 +8,7 @@ const About = () => {
         </p>
         <div className="relative h-[400px] md:h-[600px] rounded-lg overflow-hidden">
           <img 
-            src="/lovable-uploads/0d377d1f-5770-4576-b731-9893739cf816.png"
+            src="/lovable-uploads/051b5c2a-cb4f-4394-83a8-1850f36ebb3c.png"
             alt="African connectivity map"
             className="absolute inset-0 w-full h-full object-cover"
           />
