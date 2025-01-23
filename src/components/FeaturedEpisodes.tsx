@@ -66,7 +66,7 @@ const FeaturedEpisodes = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="flex-1 border-gray-700 hover:bg-gray-800 text-white opacity-100"
+                  className="flex-1 border-gray-700 hover:bg-gray-800 text-gray-300 opacity-100"
                 >
                   Show Notes
                 </Button>
