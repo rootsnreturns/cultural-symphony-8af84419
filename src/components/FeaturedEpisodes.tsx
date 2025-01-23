@@ -15,21 +15,21 @@ const episodes = [
     title: "Innovation in African Tech",
     guest: "Dr. Sarah Mensah",
     description: "Exploring the rising tech ecosystem across African markets",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e",
   },
   {
     id: 2,
     title: "Cultural Bridge Builders",
     guest: "James Okonjo",
     description: "How diaspora communities maintain connections with their roots",
-    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+    image: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6",
   },
   {
     id: 3,
     title: "Future of African Business",
     guest: "Maria Diallo",
     description: "New opportunities in pan-African entrepreneurship",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+    image: "https://images.unsplash.com/photo-1607990283143-e81e7a2c9349",
   },
 ];
 
