@@ -22,7 +22,7 @@ const MeetTheHost = () => {
             <img
               src="/lovable-uploads/a3aed2a2-0c7e-4031-8df8-1547667d8dc6.png"
               alt="Akin Walker"
-              className="absolute inset-0 w-full h-full object-cover rounded-lg"
+              className="absolute inset-0 w-full h-full object-contain rounded-lg"
             />
           </div>
         </div>
