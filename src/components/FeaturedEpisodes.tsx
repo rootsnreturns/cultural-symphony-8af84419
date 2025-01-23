@@ -15,21 +15,21 @@ const episodes = [
     title: "Innovation in African Tech",
     guest: "Dr. Sarah Mensah",
     description: "Exploring the rising tech ecosystem across African markets",
-    image: "https://images.unsplash.com/photo-1501286353178-1ec871814838",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
   },
   {
     id: 2,
     title: "Cultural Bridge Builders",
     guest: "James Okonjo",
     description: "How diaspora communities maintain connections with their roots",
-    image: "https://images.unsplash.com/photo-1469041797191-50ace28483c3",
+    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
   },
   {
     id: 3,
     title: "Future of African Business",
     guest: "Maria Diallo",
     description: "New opportunities in pan-African entrepreneurship",
-    image: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
   },
 ];
 
@@ -64,7 +64,10 @@ const FeaturedEpisodes = () => {
                 <Button className="flex-1 bg-primary hover:bg-primary/90">
                   <Play className="mr-2 h-4 w-4" /> Play Episode
                 </Button>
-                <Button variant="outline" className="flex-1 border-gray-700 hover:bg-gray-800">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 border-gray-700 hover:bg-gray-800 text-white opacity-100"
+                >
                   Show Notes
                 </Button>
               </CardFooter>
