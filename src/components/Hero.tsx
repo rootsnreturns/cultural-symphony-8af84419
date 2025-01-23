@@ -17,7 +17,7 @@ const Hero = () => {
         <img
           src="/lovable-uploads/a08a97f6-4435-4dd3-a725-4bde724605bf.png"
           alt="Roots N Returns Logo"
-          className="w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 mx-auto mb-12"
+          className="w-48 h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 mx-auto mb-12"
         />
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
           Stories of Transformation from Africa and Beyond
