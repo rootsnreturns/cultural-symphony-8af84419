@@ -30,7 +30,7 @@ const PodcastPlatforms = () => {
     {
       name: "Audible",
       url: "https://audible.com",
-      icon: "/lovable-uploads/086ff8ab-83b0-4cd9-b22b-961374220df8.png"
+      icon: "/lovable-uploads/0d377d1f-5770-4576-b731-9893739cf816.png"
     }
   ];
 
