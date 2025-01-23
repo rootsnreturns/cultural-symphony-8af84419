@@ -27,6 +27,7 @@ serve(async (req) => {
       }
     )
   } catch (error) {
+    console.error('Error in get-mapbox-token function:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       { 
