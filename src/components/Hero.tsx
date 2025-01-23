@@ -13,21 +13,23 @@ const Hero = () => {
         />
       </div>
       
-      <div className="container mx-auto px-4 z-20 text-center">
+      <div className="container mx-auto px-4 z-20 text-center pt-16 md:pt-20 lg:pt-24">
         <img
           src="/lovable-uploads/320eb689-382c-470c-a417-cc4f08f72284.png"
           alt="Roots N Returns Logo"
-          className="w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 mx-auto mb-8 animate-float"
+          className="w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 mx-auto mb-12"
         />
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
           Stories of Transformation from Africa and Beyond
         </h1>
-        <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
+        <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto">
           Connecting, informing, and inspiring Africans and the diaspora through powerful conversations
         </p>
-        <Button size="lg" className="bg-primary hover:bg-primary/90">
-          <Play className="mr-2 h-5 w-5" /> Play Latest Episode
-        </Button>
+        <div className="mb-16">
+          <Button size="lg" className="bg-primary hover:bg-primary/90">
+            <Play className="mr-2 h-5 w-5" /> Play Latest Episode
+          </Button>
+        </div>
       </div>
     </div>
   );
