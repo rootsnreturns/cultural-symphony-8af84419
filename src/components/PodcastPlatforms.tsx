@@ -5,27 +5,27 @@ const PodcastPlatforms = () => {
     {
       name: "Spotify",
       url: "https://open.spotify.com",
-      icon: "/lovable-uploads/086ff8ab-83b0-4cd9-b22b-961374220df8.png"
+      icon: "/lovable-uploads/c6c1537e-5211-4f0c-a3b3-06a1c78c5723.png"
     },
     {
       name: "Apple Podcasts",
       url: "https://podcasts.apple.com",
-      icon: "/lovable-uploads/051b5c2a-cb4f-4394-83a8-1850f36ebb3c.png"
+      icon: "/lovable-uploads/13485fe9-edd1-4caf-8b9a-69ec79537ebd.png"
     },
     {
       name: "Google Podcasts",
       url: "https://podcasts.google.com",
-      icon: "/lovable-uploads/320eb689-382c-470c-a417-cc4f08f72284.png"
+      icon: "/lovable-uploads/d0d93691-f427-416a-8a91-d6903a78f7e4.png"
     },
     {
       name: "Amazon Music",
       url: "https://music.amazon.com",
-      icon: "/lovable-uploads/0d377d1f-5770-4576-b731-9893739cf816.png"
+      icon: "/lovable-uploads/11c18658-dacc-4c22-ba57-e28dba9f67ee.png"
     },
     {
       name: "YouTube",
       url: "https://youtube.com",
-      icon: "/lovable-uploads/a3aed2a2-0c7e-4031-8df8-1547667d8dc6.png"
+      icon: "/lovable-uploads/b4516ebd-71fe-415c-8a7b-37a082094a7f.png"
     }
   ];
 
@@ -52,7 +52,7 @@ const PodcastPlatforms = () => {
                 <img
                   src={platform.icon}
                   alt={platform.name}
-                  className="w-8 h-8 object-contain"
+                  className="w-12 h-12 object-contain"
                 />
                 <span className="text-sm text-white">{platform.name}</span>
               </a>
