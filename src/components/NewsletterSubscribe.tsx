@@ -31,7 +31,7 @@ const NewsletterSubscribe = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Stay Connected</h2>
-          <p className="text-lg text-gray-600 mb-8">
+          <p className="text-lg text-gray-400 mb-8">
             Subscribe to our newsletter for the latest episodes, stories, and updates from the African diaspora.
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 justify-center">
