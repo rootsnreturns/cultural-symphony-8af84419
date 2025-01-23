@@ -20,12 +20,12 @@ const PodcastPlatforms = () => {
     {
       name: "Amazon Music",
       url: "https://music.amazon.com",
-      icon: "/lovable-uploads/11c18658-dacc-4c22-ba57-e28dba9f67ee.png"
+      icon: "/lovable-uploads/dee34e33-fcf5-4ede-8369-97554bf4d76a.png"
     },
     {
       name: "YouTube",
       url: "https://youtube.com",
-      icon: "/lovable-uploads/b4516ebd-71fe-415c-8a7b-37a082094a7f.png"
+      icon: "/lovable-uploads/f0b324ee-597e-42c1-8d93-a7543165dba1.png"
     }
   ];
 
