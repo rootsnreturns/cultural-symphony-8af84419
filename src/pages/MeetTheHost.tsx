@@ -8,7 +8,7 @@ const MeetTheHost = () => {
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold text-white">Meet Your Host</h1>
             <p className="text-xl text-gray-300">
-              Hi, I'm Sarah Johnson, the host of Roots N Returns. As an advocate for Africa's growth,
+              Hi, I'm Akin Walker, the host of Roots N Returns. As an advocate for Africa's growth,
               I'm passionate about amplifying the voices driving innovation and progress across the
               continent and the diaspora.
             </p>
@@ -20,8 +20,8 @@ const MeetTheHost = () => {
           </div>
           <div className="relative h-[500px]">
             <img
-              src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952"
-              alt="Sarah Johnson"
+              src="/lovable-uploads/a3aed2a2-0c7e-4031-8df8-1547667d8dc6.png"
+              alt="Akin Walker"
               className="absolute inset-0 w-full h-full object-cover rounded-lg"
             />
           </div>
