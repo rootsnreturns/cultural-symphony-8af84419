@@ -3,6 +3,7 @@ import About from "@/components/About";
 import FeaturedEpisodes from "@/components/FeaturedEpisodes";
 import NewsletterSubscribe from "@/components/NewsletterSubscribe";
 import PodcastPlatforms from "@/components/PodcastPlatforms";
+import EpisodeList from "@/components/EpisodeList";
 
 const Index = () => {
   return (
@@ -10,6 +11,7 @@ const Index = () => {
       <Hero />
       <About />
       <FeaturedEpisodes />
+      <EpisodeList />
       <PodcastPlatforms />
       <NewsletterSubscribe />
     </main>
