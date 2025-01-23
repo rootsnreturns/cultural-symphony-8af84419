@@ -11,7 +11,7 @@ const Navigation = () => {
               <img
                 src="/lovable-uploads/a08a97f6-4435-4dd3-a725-4bde724605bf.png"
                 alt="Roots N Returns"
-                className="h-12 w-auto"
+                className="h-16 w-auto" // Increased from h-12 to h-16
               />
             </Link>
           </div>
