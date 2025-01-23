@@ -15,7 +15,7 @@ const Hero = () => {
       
       <div className="container mx-auto px-4 z-20 text-center pt-16 md:pt-20 lg:pt-24">
         <img
-          src="/lovable-uploads/320eb689-382c-470c-a417-cc4f08f72284.png"
+          src="/lovable-uploads/a08a97f6-4435-4dd3-a725-4bde724605bf.png"
           alt="Roots N Returns Logo"
           className="w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 mx-auto mb-12"
         />
