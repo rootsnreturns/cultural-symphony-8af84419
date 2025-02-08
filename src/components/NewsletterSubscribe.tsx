@@ -65,8 +65,8 @@ const NewsletterSubscribe = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-4">Join Our Community</h2>
-            <p className="text-lg text-gray-400">
+            <h2 className="text-3xl font-bold text-white mb-4">Join Our Community</h2>
+            <p className="text-lg text-gray-200">
               Subscribe to receive curated stories, actionable resources, and exclusive updates from Africa and the diaspora.
             </p>
           </div>
@@ -74,18 +74,20 @@ const NewsletterSubscribe = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
               <div>
+                <Label className="text-gray-200 mb-2 block">Your Name</Label>
                 <Input
                   type="text"
-                  placeholder="Your Name"
+                  placeholder="Enter your full name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
                 />
               </div>
               <div>
+                <Label className="text-gray-200 mb-2 block">Your Email</Label>
                 <Input
                   type="email"
-                  placeholder="Your Email"
+                  placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -94,7 +96,7 @@ const NewsletterSubscribe = () => {
             </div>
 
             <div className="space-y-3">
-              <Label>Areas of Interest (Optional)</Label>
+              <Label className="text-gray-200 block">Areas of Interest (Optional)</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {interests.map((interest) => (
                   <div key={interest.id} className="flex items-center space-x-2">
@@ -111,7 +113,7 @@ const NewsletterSubscribe = () => {
                     />
                     <Label
                       htmlFor={interest.id}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="text-gray-200 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {interest.label}
                     </Label>

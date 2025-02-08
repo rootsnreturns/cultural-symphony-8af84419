@@ -1,14 +1,15 @@
+
 import { Button } from "@/components/ui/button";
 
-const MeetTheHost = () => {
+const MeetTheFounder = () => {
   return (
     <div className="min-h-screen bg-black pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-bold text-white">Meet Your Host</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-white">Meet Your Founder</h1>
             <p className="text-xl text-gray-300">
-              Hi, I'm Akin Walker, the host of Roots N Returns. As an advocate for Africa's growth,
+              Hi, I'm Akin Walker, the founder of Roots N Returns. As an advocate for Africa's growth,
               I'm passionate about amplifying the voices driving innovation and progress across the
               continent and the diaspora.
             </p>
@@ -31,4 +32,4 @@ const MeetTheHost = () => {
   );
 };
 
-export default MeetTheHost;
+export default MeetTheFounder;

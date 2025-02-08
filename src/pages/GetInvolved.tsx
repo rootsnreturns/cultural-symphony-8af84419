@@ -1,5 +1,6 @@
+
 import { Button } from "@/components/ui/button";
-import { Headphones, Share2, Target } from "lucide-react";
+import { BookOpen, Share2, Target } from "lucide-react";
 
 const GetInvolved = () => {
   const testimonials = [
@@ -30,11 +31,11 @@ const GetInvolved = () => {
         
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           <div className="bg-secondary/10 p-6 rounded-lg">
-            <Headphones className="w-12 h-12 text-primary mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-4">Listen</h2>
-            <p className="text-gray-300 mb-4">Tune into weekly episodes exploring African innovation and diaspora impact.</p>
+            <BookOpen className="w-12 h-12 text-primary mb-4" />
+            <h2 className="text-2xl font-bold text-white mb-4">Read</h2>
+            <p className="text-gray-300 mb-4">Discover weekly stories exploring African innovation and diaspora impact.</p>
             <Button variant="outline" className="w-full">
-              Latest Episodes
+              Latest Stories
             </Button>
           </div>
           
@@ -59,23 +60,22 @@ const GetInvolved = () => {
         
         <div className="grid md:grid-cols-2 gap-8 mb-20">
           <div className="bg-primary/10 p-8 rounded-lg">
-            <h2 className="text-3xl font-bold text-white mb-4">Donate</h2>
-            <p className="text-gray-300 mb-6">Support initiatives discussed on the podcast and help create lasting impact.</p>
-            <Button size="lg" className="w-full" id="donate">
-              Make a Donation
+            <h2 className="text-3xl font-bold text-white mb-4">Partner with Us</h2>
+            <p className="text-gray-300 mb-6">Collaborate with us to amplify African success stories and create opportunities.</p>
+            <Button size="lg" className="w-full">
+              Contact Us
             </Button>
           </div>
           
           <div className="bg-primary/10 p-8 rounded-lg">
-            <h2 className="text-3xl font-bold text-white mb-4">Partner with Us</h2>
-            <p className="text-gray-300 mb-6">Collaborate with us to amplify African success stories and create opportunities.</p>
+            <h2 className="text-3xl font-bold text-white mb-4">Join Our Network</h2>
+            <p className="text-gray-300 mb-6">Connect with changemakers and be part of the transformation.</p>
             <Button size="lg" variant="secondary" className="w-full">
-              Contact Us
+              Learn More
             </Button>
           </div>
         </div>
 
-        {/* Testimonials Section */}
         <div className="py-16">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
             Community Voices

@@ -19,13 +19,13 @@ const Hero = () => {
         />
       </div>
       
-      <div className="container mx-auto px-4 z-20 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+      <div className="container relative mx-auto px-4 z-20 text-center max-w-4xl">
+        <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
           Stay Connected.<br />
           <span className="text-primary">Stories of Transformation</span><br />
           from Africa and Beyond
         </h1>
-        <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto">
+        <p className="text-xl md:text-2xl text-gray-200 mb-12 mx-auto">
           Join our community of changemakers and receive curated stories, actionable resources, and exclusive updates.
         </p>
         <Button 
