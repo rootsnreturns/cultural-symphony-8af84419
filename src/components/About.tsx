@@ -1,11 +1,12 @@
+
 const About = () => {
   return (
-    <section className="py-20 bg-secondary flex items-center justify-center" id="about">
+    <section className="py-20 bg-secondary" id="about">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 text-center">About Our Mission</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 text-center">About Our Newsletter</h2>
           <p className="text-lg text-gray-300 mb-12 max-w-3xl mx-auto text-center">
-            Roots N Returns is more than just a podcast - it's a bridge connecting African innovation, culture, and success stories with the global diaspora. Through meaningful conversations, we explore the journeys of those making an impact across continents.
+            Roots N Returns Newsletter brings you exclusive insights, updates, and stories celebrating African innovation and diaspora collaboration—straight to your inbox.
           </p>
           <div className="relative h-[400px] md:h-[600px] rounded-lg overflow-hidden w-full max-w-5xl">
             <img 
