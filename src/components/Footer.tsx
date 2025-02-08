@@ -1,5 +1,6 @@
+
 import { Link } from "react-router-dom";
-import { Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
+import { Instagram, Linkedin, Youtube } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -22,12 +23,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link to="/meet-the-host" className="text-gray-400 hover:text-primary">
-                  Meet the Host
-                </Link>
-              </li>
-              <li>
-                <Link to="/impact-stories" className="text-gray-400 hover:text-primary">
-                  Impact Stories
+                  Meet the Founder
                 </Link>
               </li>
               <li>
@@ -44,10 +40,17 @@ const Footer = () => {
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
                 <Instagram className="w-6 h-6" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
-                <Twitter className="w-6 h-6" />
+              <a href="https://x.com/rootsnreturns" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-6 h-6"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
+              <a href="https://www.linkedin.com/company/roots-n-returns/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
                 <Linkedin className="w-6 h-6" />
               </a>
               <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
@@ -59,7 +62,7 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-semibold mb-4">Contact</h3>
             <p className="text-gray-400">
-              Email: hello@rootsnreturns.com
+              Email: info@rootsnreturns.com
             </p>
           </div>
         </div>
