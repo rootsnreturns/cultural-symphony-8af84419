@@ -1,32 +1,59 @@
 
 import { Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
-const featuredPosts = [
-  {
-    id: 1,
-    title: "Understanding African Markets",
-    date: "March 15, 2024",
-    excerpt: "An in-depth analysis of emerging market trends across the continent.",
-    category: "Markets",
-  },
-  {
-    id: 2,
-    title: "Diaspora Investment Opportunities",
-    date: "March 10, 2024",
-    excerpt: "How African diaspora can participate in continental growth.",
-    category: "Investment",
-  },
-  {
-    id: 3,
-    title: "Future of African Tech",
-    date: "March 5, 2024",
-    excerpt: "Exploring technological innovations shaping Africa's future.",
-    category: "Technology",
-  },
-];
+interface Post {
+  id: string;
+  title: string;
+  date: string;
+  excerpt: string | null;
+  category: string | null;
+}
 
 const FeaturedPosts = () => {
+  const { data: featuredPosts, isLoading } = useQuery({
+    queryKey: ['featuredPosts'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('is_featured', true)
+        .order('date', { ascending: false });
+      
+      if (error) throw error;
+      return data as Post[];
+    }
+  });
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-black">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center gap-2 mb-8 justify-center">
+            <Star className="text-primary w-6 h-6" />
+            <h2 className="text-3xl font-bold text-white">Featured Posts</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="bg-secondary border-gray-800 animate-pulse">
+                <CardHeader>
+                  <div className="h-4 bg-gray-700 rounded w-1/4 mb-2"></div>
+                  <div className="h-6 bg-gray-700 rounded w-3/4"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-4 bg-gray-700 rounded w-full mb-4"></div>
+                  <div className="h-4 bg-gray-700 rounded w-1/3"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 bg-black">
       <div className="container mx-auto px-4">
@@ -35,7 +62,7 @@ const FeaturedPosts = () => {
           <h2 className="text-3xl font-bold text-white">Featured Posts</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
-          {featuredPosts.map((post) => (
+          {featuredPosts?.map((post) => (
             <Card key={post.id} className="bg-secondary border-gray-800 hover:border-primary transition-colors">
               <CardHeader>
                 <div className="text-sm text-primary mb-2">{post.category}</div>
@@ -43,7 +70,13 @@ const FeaturedPosts = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-400 mb-4">{post.excerpt}</p>
-                <div className="text-sm text-gray-500">{post.date}</div>
+                <div className="text-sm text-gray-500">
+                  {new Date(post.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </div>
               </CardContent>
             </Card>
           ))}

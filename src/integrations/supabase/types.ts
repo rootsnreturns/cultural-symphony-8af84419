@@ -42,6 +42,39 @@ export type Database = {
         }
         Relationships: []
       }
+      posts: {
+        Row: {
+          category: string | null
+          content: string | null
+          created_at: string | null
+          date: string | null
+          excerpt: string | null
+          id: string
+          is_featured: boolean | null
+          title: string
+        }
+        Insert: {
+          category?: string | null
+          content?: string | null
+          created_at?: string | null
+          date?: string | null
+          excerpt?: string | null
+          id?: string
+          is_featured?: boolean | null
+          title: string
+        }
+        Update: {
+          category?: string | null
+          content?: string | null
+          created_at?: string | null
+          date?: string | null
+          excerpt?: string | null
+          id?: string
+          is_featured?: boolean | null
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
