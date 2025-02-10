@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Handshake } from "lucide-react";
 
 const Navigation = () => {
   return (
@@ -23,7 +23,8 @@ const Navigation = () => {
                 <BookOpen className="h-4 w-4" />
                 Stories
               </Link>
-              <Link to="/get-involved" className="text-white hover:text-primary px-3 py-2">
+              <Link to="/get-involved" className="text-white hover:text-primary px-3 py-2 flex items-center gap-2">
+                <Handshake className="h-4 w-4" />
                 Get Involved
               </Link>
             </div>
