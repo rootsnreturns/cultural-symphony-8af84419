@@ -3,9 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
-  const scrollToNewsletter = () => {
-    const newsletterSection = document.getElementById('newsletter');
-    newsletterSection?.scrollIntoView({ behavior: 'smooth' });
+  const handleSubscribe = () => {
+    window.open('https://rootsnreturns.beehiiv.com/subscribe', '_blank');
   };
 
   return (
@@ -31,7 +30,7 @@ const Hero = () => {
         <Button 
           size="lg" 
           className="bg-primary hover:bg-primary/90 text-lg"
-          onClick={scrollToNewsletter}
+          onClick={handleSubscribe}
         >
           Subscribe Now <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
