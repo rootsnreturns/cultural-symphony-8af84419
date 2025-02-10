@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +10,7 @@ import ImpactStories from "./pages/ImpactStories";
 import GetInvolved from "./pages/GetInvolved";
 import Episodes from "./pages/Episodes";
 import EpisodeDetails from "./pages/EpisodeDetails";
+import Posts from "./pages/Posts";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
@@ -28,6 +30,7 @@ const App = () => (
           <Route path="/get-involved" element={<GetInvolved />} />
           <Route path="/episodes" element={<Episodes />} />
           <Route path="/episodes/:id" element={<EpisodeDetails />} />
+          <Route path="/posts" element={<Posts />} />
         </Routes>
         <Footer />
       </BrowserRouter>
