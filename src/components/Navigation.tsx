@@ -19,15 +19,12 @@ const Navigation = () => {
           </div>
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <Link to="/meet-the-host" className="text-white hover:text-primary px-3 py-2">
-                Meet the Founder
-              </Link>
-              <Link to="/get-involved" className="text-white hover:text-primary px-3 py-2">
-                Get Involved
-              </Link>
               <Link to="/posts" className="text-white hover:text-primary px-3 py-2 flex items-center gap-2">
                 <BookOpen className="h-4 w-4" />
                 Stories
+              </Link>
+              <Link to="/get-involved" className="text-white hover:text-primary px-3 py-2">
+                Get Involved
               </Link>
             </div>
           </div>
