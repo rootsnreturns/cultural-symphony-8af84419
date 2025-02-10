@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { BookOpen } from "lucide-react";
 
 const Navigation = () => {
   return (
@@ -23,6 +24,10 @@ const Navigation = () => {
               </Link>
               <Link to="/get-involved" className="text-white hover:text-primary px-3 py-2">
                 Get Involved
+              </Link>
+              <Link to="/posts" className="text-white hover:text-primary px-3 py-2 flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
+                Stories
               </Link>
             </div>
           </div>
