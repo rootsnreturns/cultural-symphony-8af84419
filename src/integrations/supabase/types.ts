@@ -9,6 +9,21 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      config: {
+        Row: {
+          key: string
+          value: string
+        }
+        Insert: {
+          key: string
+          value: string
+        }
+        Update: {
+          key?: string
+          value?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           confirmed: boolean | null
@@ -49,8 +64,11 @@ export type Database = {
           created_at: string | null
           date: string | null
           excerpt: string | null
+          guid: string | null
           id: string
           is_featured: boolean | null
+          link: string | null
+          pub_date: string | null
           title: string
         }
         Insert: {
@@ -59,8 +77,11 @@ export type Database = {
           created_at?: string | null
           date?: string | null
           excerpt?: string | null
+          guid?: string | null
           id?: string
           is_featured?: boolean | null
+          link?: string | null
+          pub_date?: string | null
           title: string
         }
         Update: {
@@ -69,8 +90,11 @@ export type Database = {
           created_at?: string | null
           date?: string | null
           excerpt?: string | null
+          guid?: string | null
           id?: string
           is_featured?: boolean | null
+          link?: string | null
+          pub_date?: string | null
           title?: string
         }
         Relationships: []

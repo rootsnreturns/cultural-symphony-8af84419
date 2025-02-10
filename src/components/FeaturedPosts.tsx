@@ -10,6 +10,7 @@ interface Post {
   date: string;
   excerpt: string | null;
   category: string | null;
+  link: string | null;
 }
 
 const FeaturedPosts = () => {
@@ -63,22 +64,30 @@ const FeaturedPosts = () => {
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {featuredPosts?.map((post) => (
-            <Card key={post.id} className="bg-secondary border-gray-800 hover:border-primary transition-colors">
-              <CardHeader>
-                <div className="text-sm text-primary mb-2">{post.category}</div>
-                <CardTitle className="text-xl text-white">{post.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-400 mb-4">{post.excerpt}</p>
-                <div className="text-sm text-gray-500">
-                  {new Date(post.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+            <a 
+              key={post.id} 
+              href={post.link || '#'} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block"
+            >
+              <Card className="bg-secondary border-gray-800 hover:border-primary transition-colors h-full">
+                <CardHeader>
+                  <div className="text-sm text-primary mb-2">{post.category}</div>
+                  <CardTitle className="text-xl text-white">{post.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-400 mb-4">{post.excerpt}</p>
+                  <div className="text-sm text-gray-500">
+                    {new Date(post.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
           ))}
         </div>
       </div>
