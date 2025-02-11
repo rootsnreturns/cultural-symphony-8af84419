@@ -32,12 +32,13 @@ const Posts = () => {
   useEffect(() => {
     const fetchRSS = async () => {
       try {
-        await fetch("https://mjixlxfzrcayevfulzmn.supabase.co/functions/v1/fetch-rss", {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          },
+        const { error } = await supabase.functions.invoke('fetch-rss', {
+          method: 'POST'
         });
+        
+        if (error) {
+          console.error('Error fetching RSS:', error);
+        }
       } catch (error) {
         console.error('Error fetching RSS:', error);
       }
