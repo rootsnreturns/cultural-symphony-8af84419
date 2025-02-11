@@ -10,6 +10,7 @@ import GetInvolved from "./pages/GetInvolved";
 import Episodes from "./pages/Episodes";
 import EpisodeDetails from "./pages/EpisodeDetails";
 import Posts from "./pages/Posts";
+import About from "./pages/About";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
@@ -24,6 +25,7 @@ const App = () => (
         <Navigation />
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/about" element={<About />} />
           <Route path="/impact-stories" element={<ImpactStories />} />
           <Route path="/get-involved" element={<GetInvolved />} />
           <Route path="/episodes" element={<Episodes />} />

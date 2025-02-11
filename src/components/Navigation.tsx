@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { BookOpen, Handshake } from "lucide-react";
+import { BookOpen, Handshake, Info } from "lucide-react";
 
 const Navigation = () => {
   return (
@@ -19,6 +19,10 @@ const Navigation = () => {
           </div>
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
+              <Link to="/about" className="text-white hover:text-primary px-3 py-2 flex items-center gap-2">
+                <Info className="h-4 w-4" />
+                About
+              </Link>
               <Link to="/posts" className="text-white hover:text-primary px-3 py-2 flex items-center gap-2">
                 <BookOpen className="h-4 w-4" />
                 Stories
