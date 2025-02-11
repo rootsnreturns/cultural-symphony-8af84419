@@ -11,6 +11,8 @@ import Episodes from "./pages/Episodes";
 import EpisodeDetails from "./pages/EpisodeDetails";
 import Posts from "./pages/Posts";
 import About from "./pages/About";
+import Archives from "./pages/Archives";
+import Sponsor from "./pages/Sponsor";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 
@@ -31,6 +33,8 @@ const App = () => (
           <Route path="/episodes" element={<Episodes />} />
           <Route path="/episodes/:id" element={<EpisodeDetails />} />
           <Route path="/posts" element={<Posts />} />
+          <Route path="/archives" element={<Archives />} />
+          <Route path="/sponsor" element={<Sponsor />} />
         </Routes>
         <Footer />
       </BrowserRouter>

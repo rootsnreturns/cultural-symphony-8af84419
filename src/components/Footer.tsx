@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Instagram, Linkedin, Youtube } from "lucide-react";
+import { Linkedin } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -22,9 +22,19 @@ const Footer = () => {
             <h3 className="text-white font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/meet-the-host" className="text-gray-400 hover:text-primary">
-                  Meet the Founder
+                <Link to="/archives" className="text-gray-400 hover:text-primary">
+                  Archives
                 </Link>
+              </li>
+              <li>
+                <Link to="/sponsor" className="text-gray-400 hover:text-primary">
+                  Sponsor
+                </Link>
+              </li>
+              <li>
+                <a href="https://rss.beehiiv.com/feeds/O10YsDPvqE.xml" className="text-gray-400 hover:text-primary" target="_blank" rel="noopener noreferrer">
+                  RSS
+                </a>
               </li>
               <li>
                 <Link to="/get-involved" className="text-gray-400 hover:text-primary">
@@ -37,9 +47,6 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-semibold mb-4">Connect</h3>
             <div className="flex space-x-4">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
-                <Instagram className="w-6 h-6" />
-              </a>
               <a href="https://x.com/rootsnreturns" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
                 <svg
                   viewBox="0 0 24 24"
@@ -52,9 +59,6 @@ const Footer = () => {
               </a>
               <a href="https://www.linkedin.com/company/roots-n-returns/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
                 <Linkedin className="w-6 h-6" />
-              </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
-                <Youtube className="w-6 h-6" />
               </a>
             </div>
           </div>
