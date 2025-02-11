@@ -31,6 +31,12 @@ const Navigation = () => {
                 <Handshake className="h-4 w-4" />
                 Get Involved
               </Link>
+              <Link 
+                to="/sponsor" 
+                className="bg-white text-black hover:bg-gray-100 px-4 py-2 rounded-md transition-colors"
+              >
+                Sponsor
+              </Link>
             </div>
           </div>
         </div>
