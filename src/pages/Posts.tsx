@@ -32,7 +32,7 @@ const Posts = () => {
   useEffect(() => {
     const fetchRSS = async () => {
       try {
-        await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/fetch-rss`, {
+        await fetch("https://mjixlxfzrcayevfulzmn.supabase.co/functions/v1/fetch-rss", {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
