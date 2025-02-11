@@ -62,65 +62,6 @@ const About = () => {
             </Card>
           </div>
         </section>
-
-        {/* What We Offer */}
-        <section className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-12 text-center">What We Offer</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                  <Check className="w-5 h-5 text-white" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Roots N Returns Newsletter</h3>
-                <p className="text-gray-300">
-                  Stay informed with curated insights, exclusive interviews, and deep-dive analysis on Africa's most dynamic sectors.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                  <Check className="w-5 h-5 text-white" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Community & Networking</h3>
-                <p className="text-gray-300">
-                  Join a network of diaspora leaders, entrepreneurs, and investors shaping Africa's future through collaborative projects, mentorship, and strategic partnerships.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                  <Check className="w-5 h-5 text-white" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Opportunities & Investment Pathways</h3>
-                <p className="text-gray-300">
-                  We spotlight diaspora-led ventures, investment-ready startups, and actionable opportunities to fuel economic growth and innovation.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                  <Check className="w-5 h-5 text-white" />
-                </div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-2">Exclusive Events & Thought Leadership</h3>
-                <p className="text-gray-300">
-                  Participate in virtual discussions, roundtables, and industry panels featuring experts driving Africa's transformation.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
     </main>
   );
