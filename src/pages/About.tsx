@@ -7,13 +7,13 @@ const About = () => {
     <main className="min-h-screen bg-black pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">About Roots N Returns</h1>
           <p className="text-2xl text-primary font-semibold">Reimagining Pan-Africanism: Turning Heritage into Impact</p>
         </div>
 
         {/* Mission Statement */}
-        <div className="mb-20">
+        <div className="mb-16">
           <div className="max-w-3xl mx-auto text-gray-300 space-y-6 text-lg">
             <p>
               At Roots N Returns, we believe Africa's future is built through trust, collaboration, and action—not just conversation. We are a global movement connecting Africa and its diaspora, transforming shared heritage into collective progress.
@@ -25,9 +25,9 @@ const About = () => {
         </div>
 
         {/* Why Roots N Returns */}
-        <section className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-12 text-center">Why Roots N Returns?</h2>
-          <div className="grid md:grid-cols-2 gap-8">
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">Why Roots N Returns?</h2>
+          <div className="grid md:grid-cols-2 gap-6">
             <Card className="bg-secondary border-gray-800">
               <CardHeader>
                 <CardTitle className="text-white">A Bridge Between Africa & Its Diaspora</CardTitle>
