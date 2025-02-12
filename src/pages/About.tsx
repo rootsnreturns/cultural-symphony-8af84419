@@ -62,6 +62,45 @@ const About = () => {
             </Card>
           </div>
         </section>
+
+        {/* What We Offer */}
+        <section className="mb-24">
+          <h2 className="text-3xl font-bold text-white mb-8 text-center">What We Offer</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="bg-secondary border-gray-800">
+              <CardHeader>
+                <CardTitle className="text-white">Roots N Returns Newsletter</CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300">
+                Stay informed with curated insights, exclusive interviews, and deep-dive analysis on Africa's most dynamic sectors.
+              </CardContent>
+            </Card>
+            <Card className="bg-secondary border-gray-800">
+              <CardHeader>
+                <CardTitle className="text-white">Community & Networking</CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300">
+                Join a network of diaspora leaders, entrepreneurs, and investors shaping Africa's future through collaborative projects, mentorship, and strategic partnerships.
+              </CardContent>
+            </Card>
+            <Card className="bg-secondary border-gray-800">
+              <CardHeader>
+                <CardTitle className="text-white">Opportunities & Investment Pathways</CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300">
+                We spotlight diaspora-led ventures, investment-ready startups, and actionable opportunities to fuel economic growth and innovation.
+              </CardContent>
+            </Card>
+            <Card className="bg-secondary border-gray-800">
+              <CardHeader>
+                <CardTitle className="text-white">Exclusive Events & Thought Leadership</CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300">
+                Participate in virtual discussions, roundtables, and industry panels featuring experts driving Africa's transformation.
+              </CardContent>
+            </Card>
+          </div>
+        </section>
       </div>
     </main>
   );
