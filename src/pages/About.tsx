@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const About = () => {
   return (
-    <main className="min-h-screen bg-black pt-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-black">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-32">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">About Roots N Returns</h1>
@@ -25,7 +25,7 @@ const About = () => {
         </div>
 
         {/* Why Roots N Returns */}
-        <section className="mb-16">
+        <section className="mb-24">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Why Roots N Returns?</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="bg-secondary border-gray-800">
