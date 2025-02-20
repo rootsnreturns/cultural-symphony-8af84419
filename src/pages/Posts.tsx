@@ -59,7 +59,10 @@ const Posts = () => {
       }
     };
 
+    // Initial fetch
     fetchRSS();
+    
+    // Set up periodic fetching every 15 minutes
     const interval = setInterval(fetchRSS, 15 * 60 * 1000);
     return () => clearInterval(interval);
   }, [refetch, toast]);

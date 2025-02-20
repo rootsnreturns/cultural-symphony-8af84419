@@ -68,7 +68,6 @@ export type Database = {
           id: string
           is_featured: boolean | null
           link: string | null
-          pub_date: string | null
           title: string
         }
         Insert: {
@@ -81,7 +80,6 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           link?: string | null
-          pub_date?: string | null
           title: string
         }
         Update: {
@@ -94,7 +92,6 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           link?: string | null
-          pub_date?: string | null
           title?: string
         }
         Relationships: []
