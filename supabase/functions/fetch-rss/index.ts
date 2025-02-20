@@ -9,13 +9,11 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    // Initialize Supabase client
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
@@ -33,17 +31,20 @@ serve(async (req) => {
       throw new Error('Could not fetch RSS feed URL from config')
     }
 
-    if (!configData?.value) {
+    const feedUrl = configData?.value
+    if (!feedUrl) {
       throw new Error('RSS feed URL not configured')
     }
 
-    console.log('Fetching RSS feed from:', configData.value)
+    console.log('Fetching RSS feed from:', feedUrl)
 
-    // Fetch RSS feed with appropriate headers
-    const response = await fetch(configData.value, {
+    // Fetch RSS feed with cache-busting
+    const response = await fetch(`${feedUrl}?_=${Date.now()}`, {
       headers: {
         'Accept': 'application/xml, application/rss+xml, text/xml',
-        'User-Agent': 'Mozilla/5.0 (compatible; RSS Reader Bot/1.0)'
+        'User-Agent': 'Mozilla/5.0 (compatible; RSS Reader Bot/1.0)',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache'
       }
     })
 
@@ -52,9 +53,8 @@ serve(async (req) => {
     }
 
     const xmlText = await response.text()
-    console.log('Received XML response')
+    console.log('Raw XML response:', xmlText.substring(0, 500)) // Log first 500 chars for debugging
     
-    // Parse XML to JSON using Deno DOM
     const parser = new DOMParser()
     const xmlDoc = parser.parseFromString(xmlText, 'text/xml')
     
@@ -65,15 +65,36 @@ serve(async (req) => {
     const items = xmlDoc.getElementsByTagName('item')
     console.log(`Found ${items.length} items in RSS feed`)
 
-    const posts = Array.from(items).map(item => ({
-      guid: item.getElementsByTagName('guid')[0]?.textContent || crypto.randomUUID(),
-      title: item.getElementsByTagName('title')[0]?.textContent || 'Untitled',
-      link: item.getElementsByTagName('link')[0]?.textContent || null,
-      pub_date: item.getElementsByTagName('pubDate')[0]?.textContent || new Date().toISOString(),
-      content: item.getElementsByTagName('description')[0]?.textContent || '',
-      excerpt: (item.getElementsByTagName('description')[0]?.textContent || '').substring(0, 150) + '...',
-      category: item.getElementsByTagName('category')[0]?.textContent || 'Uncategorized',
-    }))
+    // Enhanced logging for the first item
+    if (items.length > 0) {
+      const firstItem = items[0]
+      console.log('First item details:', {
+        title: firstItem.getElementsByTagName('title')[0]?.textContent,
+        link: firstItem.getElementsByTagName('link')[0]?.textContent,
+        pubDate: firstItem.getElementsByTagName('pubDate')[0]?.textContent,
+      })
+    }
+
+    const posts = Array.from(items).map(item => {
+      const pubDate = item.getElementsByTagName('pubDate')[0]?.textContent
+      const date = pubDate ? new Date(pubDate) : new Date()
+      
+      // Enhanced logging for date parsing
+      console.log('Processing date:', {
+        original: pubDate,
+        parsed: date.toISOString()
+      })
+
+      return {
+        guid: item.getElementsByTagName('guid')[0]?.textContent || crypto.randomUUID(),
+        title: item.getElementsByTagName('title')[0]?.textContent || 'Untitled',
+        link: item.getElementsByTagName('link')[0]?.textContent || null,
+        date: date.toISOString(),
+        content: item.getElementsByTagName('description')[0]?.textContent || '',
+        excerpt: (item.getElementsByTagName('description')[0]?.textContent || '').substring(0, 150) + '...',
+        category: item.getElementsByTagName('category')[0]?.textContent || 'Uncategorized',
+      }
+    })
 
     console.log(`Processing ${posts.length} posts`)
 
@@ -81,6 +102,13 @@ serve(async (req) => {
     let successCount = 0
     for (const post of posts) {
       try {
+        // Log each post before upserting
+        console.log('Upserting post:', {
+          guid: post.guid,
+          title: post.title,
+          date: post.date
+        })
+
         const { error: upsertError } = await supabaseClient
           .from('posts')
           .upsert(
@@ -88,7 +116,7 @@ serve(async (req) => {
               guid: post.guid,
               title: post.title,
               link: post.link,
-              date: new Date(post.pub_date).toISOString(),
+              date: post.date,
               content: post.content,
               excerpt: post.excerpt,
               category: post.category,
@@ -135,7 +163,7 @@ serve(async (req) => {
           ...corsHeaders, 
           'Content-Type': 'application/json' 
         },
-        status: 200 // Return 200 even for errors to avoid CORS issues
+        status: 200
       }
     )
   }
