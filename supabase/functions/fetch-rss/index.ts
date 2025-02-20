@@ -19,27 +19,10 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Get RSS feed URL from config
-    const { data: configData, error: configError } = await supabaseClient
-      .from('config')
-      .select('value')
-      .eq('key', 'rss_feed_url')
-      .single()
-
-    if (configError) {
-      console.error('Error fetching config:', configError)
-      throw new Error('Could not fetch RSS feed URL from config')
-    }
-
-    const feedUrl = configData?.value
-    if (!feedUrl) {
-      throw new Error('RSS feed URL not configured')
-    }
-
+    const feedUrl = "https://rss.beehiiv.com/feeds/O10YsDPvqE.xml"
     console.log('Fetching RSS feed from:', feedUrl)
 
-    // Fetch RSS feed with cache-busting
-    const response = await fetch(`${feedUrl}?_=${Date.now()}`, {
+    const response = await fetch(feedUrl, {
       headers: {
         'Accept': 'application/xml, application/rss+xml, text/xml',
         'User-Agent': 'Mozilla/5.0 (compatible; RSS Reader Bot/1.0)',
@@ -53,7 +36,7 @@ serve(async (req) => {
     }
 
     const xmlText = await response.text()
-    console.log('Raw XML response:', xmlText.substring(0, 500)) // Log first 500 chars for debugging
+    console.log('Received XML response')
     
     const parser = new DOMParser()
     const xmlDoc = parser.parseFromString(xmlText, 'text/xml')
@@ -65,34 +48,32 @@ serve(async (req) => {
     const items = xmlDoc.getElementsByTagName('item')
     console.log(`Found ${items.length} items in RSS feed`)
 
-    // Enhanced logging for the first item
-    if (items.length > 0) {
-      const firstItem = items[0]
-      console.log('First item details:', {
-        title: firstItem.getElementsByTagName('title')[0]?.textContent,
-        link: firstItem.getElementsByTagName('link')[0]?.textContent,
-        pubDate: firstItem.getElementsByTagName('pubDate')[0]?.textContent,
-      })
-    }
-
     const posts = Array.from(items).map(item => {
-      const pubDate = item.getElementsByTagName('pubDate')[0]?.textContent
-      const date = pubDate ? new Date(pubDate) : new Date()
+      const guid = item.getElementsByTagName('guid')[0]?.textContent || ''
+      const title = item.getElementsByTagName('title')[0]?.textContent || 'Untitled'
+      const link = item.getElementsByTagName('link')[0]?.textContent || null
+      const description = item.getElementsByTagName('description')[0]?.textContent || ''
       
-      // Enhanced logging for date parsing
-      console.log('Processing date:', {
-        original: pubDate,
-        parsed: date.toISOString()
-      })
+      // Parse HTML content from description to get the excerpt
+      const tempDiv = parser.parseFromString(description, 'text/html')
+      const textContent = tempDiv?.documentElement?.textContent || ''
+      const excerpt = textContent.substring(0, 150) + '...'
+
+      // Get category from the first category tag or default to Newsletter
+      const category = item.getElementsByTagName('category')[0]?.textContent || 'Newsletter'
+
+      // Parse the publication date
+      const pubDate = item.getElementsByTagName('pubDate')[0]?.textContent
+      const date = pubDate ? new Date(pubDate).toISOString() : new Date().toISOString()
 
       return {
-        guid: item.getElementsByTagName('guid')[0]?.textContent || crypto.randomUUID(),
-        title: item.getElementsByTagName('title')[0]?.textContent || 'Untitled',
-        link: item.getElementsByTagName('link')[0]?.textContent || null,
-        date: date.toISOString(),
-        content: item.getElementsByTagName('description')[0]?.textContent || '',
-        excerpt: (item.getElementsByTagName('description')[0]?.textContent || '').substring(0, 150) + '...',
-        category: item.getElementsByTagName('category')[0]?.textContent || 'Uncategorized',
+        guid,
+        title,
+        link,
+        date,
+        content: description,
+        excerpt,
+        category,
       }
     })
 
@@ -102,12 +83,7 @@ serve(async (req) => {
     let successCount = 0
     for (const post of posts) {
       try {
-        // Log each post before upserting
-        console.log('Upserting post:', {
-          guid: post.guid,
-          title: post.title,
-          date: post.date
-        })
+        console.log('Upserting post:', post.title)
 
         const { error: upsertError } = await supabaseClient
           .from('posts')
@@ -137,6 +113,21 @@ serve(async (req) => {
     }
 
     console.log(`Successfully processed ${successCount} out of ${posts.length} posts`)
+
+    // Store the RSS feed URL in config
+    const { error: configError } = await supabaseClient
+      .from('config')
+      .upsert(
+        { 
+          key: 'rss_feed_url',
+          value: feedUrl
+        },
+        { onConflict: 'key' }
+      )
+
+    if (configError) {
+      console.error('Error updating config:', configError)
+    }
 
     return new Response(
       JSON.stringify({ 
