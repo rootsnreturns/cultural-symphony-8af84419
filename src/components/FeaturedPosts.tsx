@@ -1,5 +1,5 @@
 
-import { Star } from "lucide-react";
+import { Star, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,7 +14,7 @@ interface Post {
 }
 
 const FeaturedPosts = () => {
-  const { data: featuredPosts } = useQuery({
+  const { data: featuredPosts, isLoading } = useQuery({
     queryKey: ['featuredPosts'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -30,6 +30,18 @@ const FeaturedPosts = () => {
     refetchOnWindowFocus: true
   });
 
+  // If loading, show a spinner
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-black">
+        <div className="container mx-auto px-4 flex justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </section>
+    );
+  }
+
+  // If no posts or empty array, don't render anything
   if (!featuredPosts || featuredPosts.length === 0) {
     return null;
   }
