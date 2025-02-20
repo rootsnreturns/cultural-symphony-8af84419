@@ -25,7 +25,9 @@ const FeaturedPosts = () => {
       
       if (error) throw error;
       return data as Post[];
-    }
+    },
+    staleTime: 1000 * 60 * 5, // Consider data stale after 5 minutes
+    refetchOnWindowFocus: true
   });
 
   if (isLoading) {

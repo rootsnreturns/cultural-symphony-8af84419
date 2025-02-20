@@ -17,7 +17,7 @@ interface Post {
 const Posts = () => {
   const { toast } = useToast();
 
-  // Fetch posts from Supabase
+  // Fetch posts from Supabase with shorter stale time
   const { data: posts, isLoading, refetch } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
@@ -28,14 +28,15 @@ const Posts = () => {
       
       if (error) throw error;
       return data as Post[];
-    }
+    },
+    staleTime: 1000 * 60 * 5, // Consider data stale after 5 minutes
+    refetchOnWindowFocus: true
   });
 
   // Fetch RSS feed immediately and periodically
   useEffect(() => {
     const fetchRSS = async () => {
       try {
-        // Invoke the edge function without additional headers
         const { data, error } = await supabase.functions.invoke('fetch-rss');
         
         if (error) {
@@ -47,10 +48,10 @@ const Posts = () => {
           });
         } else {
           // Refetch posts after successful RSS fetch
-          refetch();
+          await refetch();
           toast({
             title: "Posts updated",
-            description: `Successfully fetched ${(data as any)?.count || 0} posts.`,
+            description: `Successfully fetched ${(data as any)?.count || 0} new posts.`,
           });
         }
       } catch (error) {
