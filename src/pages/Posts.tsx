@@ -23,14 +23,12 @@ const Posts = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('posts')
-        .select('*')
+        .select('id, title, date, excerpt, category, link')
         .order('date', { ascending: false });
       
       if (error) throw error;
       return data as Post[];
-    },
-    staleTime: 1000 * 60 * 5, // Consider data stale after 5 minutes
-    refetchOnWindowFocus: true
+    }
   });
 
   useEffect(() => {

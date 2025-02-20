@@ -14,26 +14,20 @@ interface Post {
 }
 
 const FeaturedPosts = () => {
-  const { data: featuredPosts, isLoading, isError } = useQuery({
+  const { data: featuredPosts, isLoading } = useQuery({
     queryKey: ['featuredPosts'],
     queryFn: async () => {
-      try {
-        const { data, error } = await supabase
-          .from('posts')
-          .select('id, title, date, excerpt, category, link')
-          .eq('is_featured', true)
-          .order('date', { ascending: false });
-        
-        if (error) throw error;
-        return data as Post[];
-      } catch (error) {
-        console.error('Error fetching featured posts:', error);
-        return [];
-      }
+      const { data, error } = await supabase
+        .from('posts')
+        .select('id, title, date, excerpt, category, link')
+        .eq('is_featured', true)
+        .order('date', { ascending: false });
+      
+      if (error) throw error;
+      return data as Post[];
     }
   });
 
-  // Loading state
   if (isLoading) {
     return (
       <section className="py-16 bg-black">
@@ -44,8 +38,7 @@ const FeaturedPosts = () => {
     );
   }
 
-  // Error or no posts state
-  if (isError || !featuredPosts || featuredPosts.length === 0) {
+  if (!featuredPosts || featuredPosts.length === 0) {
     return null;
   }
 
