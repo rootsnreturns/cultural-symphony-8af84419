@@ -14,31 +14,22 @@ interface Post {
 }
 
 const FeaturedPosts = () => {
-  const { data: featuredPosts, isLoading, isError, error } = useQuery({
+  const { data: featuredPosts, isLoading } = useQuery({
     queryKey: ['featuredPosts'],
     queryFn: async () => {
-      console.log('Fetching featured posts...');
       const { data, error } = await supabase
         .from('posts')
         .select('id, title, date, excerpt, category, link')
         .eq('is_featured', true)
         .order('date', { ascending: false });
       
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-      
-      console.log('Fetched posts:', data);
+      if (error) throw error;
       return data as Post[];
-    },
-    retry: false // Disable retries to make errors more visible
+    }
   });
 
-  console.log('Component state:', { isLoading, isError, postsLength: featuredPosts?.length });
-
+  // Return early if loading
   if (isLoading) {
-    console.log('Showing loading spinner');
     return (
       <section className="py-16 bg-black">
         <div className="container mx-auto px-4 flex items-center justify-center min-h-[200px]">
@@ -48,17 +39,12 @@ const FeaturedPosts = () => {
     );
   }
 
-  if (isError) {
-    console.error('Query error:', error);
-    return null;
-  }
-
+  // Return null if no posts
   if (!featuredPosts || featuredPosts.length === 0) {
-    console.log('No featured posts found');
     return null;
   }
 
-  console.log('Rendering posts:', featuredPosts);
+  // Render posts
   return (
     <section className="py-16 bg-black">
       <div className="container mx-auto px-4">
