@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface Post {
   id: string;
@@ -14,8 +15,10 @@ interface Post {
 }
 
 const Posts = () => {
+  const { toast } = useToast();
+
   // Fetch posts from Supabase
-  const { data: posts, isLoading } = useQuery({
+  const { data: posts, isLoading, refetch } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -28,7 +31,7 @@ const Posts = () => {
     }
   });
 
-  // Fetch RSS feed periodically
+  // Fetch RSS feed immediately and periodically
   useEffect(() => {
     const fetchRSS = async () => {
       try {
@@ -38,17 +41,36 @@ const Posts = () => {
         
         if (error) {
           console.error('Error fetching RSS:', error);
+          toast({
+            title: "Error fetching posts",
+            description: "There was an error fetching the latest posts. Please try again later.",
+            variant: "destructive"
+          });
+        } else {
+          // Refetch posts after successful RSS fetch
+          refetch();
+          toast({
+            title: "Posts updated",
+            description: "Latest posts have been fetched successfully.",
+          });
         }
       } catch (error) {
         console.error('Error fetching RSS:', error);
+        toast({
+          title: "Error fetching posts",
+          description: "There was an error fetching the latest posts. Please try again later.",
+          variant: "destructive"
+        });
       }
     };
 
-    // Fetch immediately and then every 15 minutes
+    // Fetch immediately
     fetchRSS();
+    
+    // Then fetch every 15 minutes
     const interval = setInterval(fetchRSS, 15 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [refetch, toast]);
 
   if (isLoading) {
     return (
