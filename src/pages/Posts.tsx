@@ -1,7 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { LoadingSpinner } from "@/components/ui/loading";
@@ -23,13 +22,12 @@ const Posts = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('posts')
-        .select('id, title, date, excerpt, category, link')
+        .select('*')
         .order('date', { ascending: false });
       
       if (error) throw error;
       return data as Post[];
-    },
-    retry: false
+    }
   });
 
   useEffect(() => {
@@ -82,24 +80,22 @@ const Posts = () => {
                 href={post.link || '#'} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="block"
+                className="block group"
               >
-                <Card className="bg-secondary border-gray-800 hover:border-primary transition-colors h-full">
-                  <CardHeader>
+                <div className="rounded-lg border border-gray-800 bg-secondary p-6 h-full transition-colors group-hover:border-primary">
+                  <div className="mb-6">
                     <div className="text-sm text-primary mb-2">{post.category}</div>
-                    <CardTitle className="text-xl text-white">{post.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-400 mb-4">{post.excerpt}</p>
-                    <div className="text-sm text-gray-500">
-                      {new Date(post.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </div>
-                  </CardContent>
-                </Card>
+                    <h3 className="text-xl font-semibold text-white mb-4">{post.title}</h3>
+                    <p className="text-gray-400">{post.excerpt}</p>
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {new Date(post.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </div>
+                </div>
               </a>
             ))}
           </div>
