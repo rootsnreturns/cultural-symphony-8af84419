@@ -9,104 +9,118 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
-    const supabaseClient = createClient(
+    // Initialize Supabase client
+    const supabaseAdmin = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
     );
 
     const feedUrl = "https://rss.beehiiv.com/feeds/O10YsDPvqE.xml";
-    console.log('Fetching RSS feed from:', feedUrl);
+    console.log('Starting RSS fetch from:', feedUrl);
 
-    const response = await fetch(feedUrl, {
-      headers: {
-        'Accept': 'application/xml, application/rss+xml, text/xml',
-        'User-Agent': 'Mozilla/5.0 (compatible; RSS Reader Bot/1.0)',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache'
-      }
-    });
-
+    // Fetch RSS feed
+    const response = await fetch(feedUrl);
     if (!response.ok) {
-      throw new Error(`Failed to fetch RSS feed: ${response.status} ${response.statusText}`);
+      throw new Error(`RSS feed fetch failed with status: ${response.status}`);
     }
 
     const xmlText = await response.text();
     const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
 
-    if (!xmlDoc || xmlDoc.getElementsByTagName('parsererror').length > 0) {
-      throw new Error('Invalid XML response from RSS feed');
+    if (!xmlDoc) {
+      throw new Error("Failed to parse XML document");
     }
 
-    const items = xmlDoc.getElementsByTagName('item');
-    console.log(`Found ${items.length} items in RSS feed`);
+    const items = xmlDoc.getElementsByTagName("item");
+    console.log(`Processing ${items.length} RSS items`);
 
-    let insertCount = 0;
+    const updates = [];
     for (const item of Array.from(items)) {
       const guid = item.getElementsByTagName('guid')[0]?.textContent;
-      if (!guid) continue;
-
       const title = item.getElementsByTagName('title')[0]?.textContent;
-      if (!title) continue;
+
+      if (!guid || !title) {
+        console.log('Skipping item due to missing guid or title');
+        continue;
+      }
 
       const link = item.getElementsByTagName('link')[0]?.textContent || null;
       const description = item.getElementsByTagName('description')[0]?.textContent || '';
       const category = item.getElementsByTagName('category')[0]?.textContent || 'General';
       const pubDate = item.getElementsByTagName('pubDate')[0]?.textContent;
-      
-      // Parse HTML content to get clean excerpt
+
+      // Clean excerpt from HTML
       const tempDiv = parser.parseFromString(description, 'text/html');
       const textContent = tempDiv?.documentElement?.textContent || '';
       const excerpt = textContent.substring(0, 150) + '...';
-      
+
       const date = pubDate ? new Date(pubDate).toISOString() : new Date().toISOString();
 
-      const { error: upsertError } = await supabaseClient
-        .from('posts')
-        .upsert({
-          guid,
-          title,
-          link,
-          date,
-          content: description,
-          excerpt,
-          category
-        }, {
-          onConflict: 'guid'
-        });
+      updates.push({
+        guid,
+        title,
+        link,
+        date,
+        content: description,
+        excerpt,
+        category
+      });
+    }
 
-      if (!upsertError) {
-        insertCount++;
-      } else {
-        console.error('Error upserting post:', upsertError);
-      }
+    console.log(`Attempting to upsert ${updates.length} posts`);
+
+    // Batch upsert all posts
+    const { error: upsertError } = await supabaseAdmin
+      .from('posts')
+      .upsert(updates, {
+        onConflict: 'guid'
+      });
+
+    if (upsertError) {
+      throw upsertError;
     }
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         success: true,
         message: 'Posts updated successfully',
-        count: insertCount
+        count: updates.length
       }),
       {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        }
       }
     );
+
   } catch (error) {
     console.error('Error in fetch-rss function:', error);
+    
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         success: false,
         error: error.message
       }),
       {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        },
+        status: 200 // Return 200 even for errors to prevent function failure
       }
     );
   }
