@@ -1,6 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4'
+import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -38,13 +39,8 @@ serve(async (req) => {
 
     console.log('Fetching RSS feed from:', configData.value)
 
-    // Fetch RSS feed with appropriate headers
-    const response = await fetch(configData.value, {
-      headers: {
-        'Accept': 'application/xml, application/rss+xml, text/xml',
-        'User-Agent': 'Mozilla/5.0 (compatible; RSS Reader Bot/1.0)'
-      }
-    })
+    // Fetch RSS feed
+    const response = await fetch(configData.value)
 
     if (!response.ok) {
       throw new Error(`Failed to fetch RSS feed: ${response.status} ${response.statusText}`)
@@ -52,25 +48,25 @@ serve(async (req) => {
 
     const xmlText = await response.text()
     
-    // Parse XML to JSON
+    // Parse XML to JSON using Deno DOM
     const parser = new DOMParser()
     const xmlDoc = parser.parseFromString(xmlText, 'text/xml')
     
-    if (!xmlDoc || xmlDoc.getElementsByTagName('parsererror').length > 0) {
-      throw new Error('Invalid XML response from RSS feed')
+    if (!xmlDoc) {
+      throw new Error('Failed to parse XML response')
     }
 
     const items = xmlDoc.getElementsByTagName('item')
     console.log(`Found ${items.length} items in RSS feed`)
 
     const posts = Array.from(items).map(item => ({
-      guid: item.getElementsByTagName('guid')[0]?.textContent || '',
-      title: item.getElementsByTagName('title')[0]?.textContent || '',
-      link: item.getElementsByTagName('link')[0]?.textContent || '',
-      pub_date: item.getElementsByTagName('pubDate')[0]?.textContent || '',
-      content: item.getElementsByTagName('description')[0]?.textContent || '',
-      excerpt: item.getElementsByTagName('description')[0]?.textContent?.substring(0, 150) + '...' || '',
-      category: item.getElementsByTagName('category')[0]?.textContent || null,
+      guid: item.querySelector('guid')?.textContent || crypto.randomUUID(),
+      title: item.querySelector('title')?.textContent || 'Untitled',
+      link: item.querySelector('link')?.textContent || null,
+      pub_date: item.querySelector('pubDate')?.textContent || new Date().toISOString(),
+      content: item.querySelector('description')?.textContent || '',
+      excerpt: (item.querySelector('description')?.textContent || '').substring(0, 150) + '...',
+      category: item.querySelector('category')?.textContent || 'Uncategorized',
     }))
 
     console.log(`Processing ${posts.length} posts`)
@@ -84,37 +80,47 @@ serve(async (req) => {
             guid: post.guid,
             title: post.title,
             link: post.link,
-            pub_date: post.pub_date,
+            date: new Date(post.pub_date).toISOString(),
             content: post.content,
             excerpt: post.excerpt,
             category: post.category,
-            date: post.pub_date,
           },
           {
-            onConflict: 'guid',
+            onConflict: 'guid'
           }
         )
 
       if (upsertError) {
         console.error('Error upserting post:', upsertError)
-        // Continue with other posts even if one fails
       }
     }
 
     return new Response(
-      JSON.stringify({ message: 'Posts updated successfully', count: posts.length }),
+      JSON.stringify({ 
+        success: true, 
+        message: 'Posts updated successfully', 
+        count: posts.length 
+      }),
       {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        }
       }
     )
   } catch (error) {
     console.error('Error in fetch-rss function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        success: false, 
+        error: error.message 
+      }),
       {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        },
+        status: 200 // Return 200 even for errors to avoid CORS issues
       }
     )
   }
