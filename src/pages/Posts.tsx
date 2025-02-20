@@ -35,9 +35,8 @@ const Posts = () => {
   useEffect(() => {
     const fetchRSS = async () => {
       try {
-        const { error } = await supabase.functions.invoke('fetch-rss', {
-          method: 'POST'
-        });
+        // Invoke the edge function without additional headers
+        const { data, error } = await supabase.functions.invoke('fetch-rss');
         
         if (error) {
           console.error('Error fetching RSS:', error);
@@ -51,7 +50,7 @@ const Posts = () => {
           refetch();
           toast({
             title: "Posts updated",
-            description: "Latest posts have been fetched successfully.",
+            description: `Successfully fetched ${(data as any)?.count || 0} posts.`,
           });
         }
       } catch (error) {
