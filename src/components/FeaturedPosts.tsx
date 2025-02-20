@@ -30,31 +30,12 @@ const FeaturedPosts = () => {
     refetchOnWindowFocus: true
   });
 
-  if (isLoading) {
-    return (
-      <section className="py-16 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 mb-8 justify-center">
-            <Star className="text-primary w-6 h-6" />
-            <h2 className="text-3xl font-bold text-white">Featured Posts</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="bg-secondary border-gray-800 animate-pulse">
-                <CardHeader>
-                  <div className="h-4 bg-gray-700 rounded w-1/4 mb-2"></div>
-                  <div className="h-6 bg-gray-700 rounded w-3/4"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-4 bg-gray-700 rounded w-full mb-4"></div>
-                  <div className="h-4 bg-gray-700 rounded w-1/3"></div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
+  if (isLoading || !featuredPosts) {
+    return null;
+  }
+
+  if (featuredPosts.length === 0) {
+    return null;
   }
 
   return (
@@ -65,7 +46,7 @@ const FeaturedPosts = () => {
           <h2 className="text-3xl font-bold text-white">Featured Posts</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
-          {featuredPosts?.map((post) => (
+          {featuredPosts.map((post) => (
             <a 
               key={post.id} 
               href={post.link || '#'} 
