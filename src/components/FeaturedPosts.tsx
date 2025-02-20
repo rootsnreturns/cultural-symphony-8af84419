@@ -25,9 +25,7 @@ const FeaturedPosts = () => {
       
       if (error) throw error;
       return data as Post[];
-    },
-    suspense: false, // Explicitly disable Suspense
-    useErrorBoundary: false // Don't use error boundary
+    }
   });
 
   if (isLoading) {

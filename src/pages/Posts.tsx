@@ -28,9 +28,7 @@ const Posts = () => {
       
       if (error) throw error;
       return data as Post[];
-    },
-    suspense: false, // Explicitly disable Suspense
-    useErrorBoundary: false // Don't use error boundary
+    }
   });
 
   useEffect(() => {
