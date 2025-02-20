@@ -28,23 +28,26 @@ const FeaturedPosts = () => {
     }
   });
 
-  // Return early if loading
   if (isLoading) {
     return (
       <section className="py-16 bg-black">
-        <div className="container mx-auto px-4 flex items-center justify-center min-h-[200px]">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <div className="container mx-auto px-4">
+          <div className="flex items-center gap-2 mb-8 justify-center">
+            <Star className="text-primary w-6 h-6" />
+            <h2 className="text-3xl font-bold text-white">Featured Posts</h2>
+          </div>
+          <div className="flex items-center justify-center min-h-[200px]">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          </div>
         </div>
       </section>
     );
   }
 
-  // Return null if no posts
   if (!featuredPosts || featuredPosts.length === 0) {
     return null;
   }
 
-  // Render posts
   return (
     <section className="py-16 bg-black">
       <div className="container mx-auto px-4">

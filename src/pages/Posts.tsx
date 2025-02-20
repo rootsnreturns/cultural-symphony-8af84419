@@ -65,15 +65,24 @@ const Posts = () => {
     return () => clearInterval(interval);
   }, [refetch, toast]);
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-12">Stories</h1>
+          <div className="flex items-center justify-center min-h-[200px]">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-12">Stories</h1>
-        {isLoading ? (
-          <div className="flex items-center justify-center min-h-[200px]">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : !posts || posts.length === 0 ? (
+        {!posts || posts.length === 0 ? (
           <p className="text-gray-400 text-center">No posts available yet.</p>
         ) : (
           <div className="grid md:grid-cols-3 gap-6">
