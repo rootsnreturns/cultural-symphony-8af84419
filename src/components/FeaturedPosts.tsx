@@ -28,6 +28,7 @@ const FeaturedPosts = () => {
     }
   });
 
+  // Early return if loading
   if (isLoading) {
     return (
       <section className="py-16 bg-black">
@@ -44,6 +45,7 @@ const FeaturedPosts = () => {
     );
   }
 
+  // Early return if no posts
   if (!featuredPosts || featuredPosts.length === 0) {
     return null;
   }
