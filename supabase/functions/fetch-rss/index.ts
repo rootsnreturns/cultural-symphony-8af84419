@@ -11,7 +11,7 @@ const corsHeaders = {
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders })
   }
 
   try {
@@ -39,67 +39,82 @@ serve(async (req) => {
 
     console.log('Fetching RSS feed from:', configData.value)
 
-    // Fetch RSS feed
-    const response = await fetch(configData.value)
+    // Fetch RSS feed with appropriate headers
+    const response = await fetch(configData.value, {
+      headers: {
+        'Accept': 'application/xml, application/rss+xml, text/xml',
+        'User-Agent': 'Mozilla/5.0 (compatible; RSS Reader Bot/1.0)'
+      }
+    })
 
     if (!response.ok) {
       throw new Error(`Failed to fetch RSS feed: ${response.status} ${response.statusText}`)
     }
 
     const xmlText = await response.text()
+    console.log('Received XML response')
     
     // Parse XML to JSON using Deno DOM
     const parser = new DOMParser()
     const xmlDoc = parser.parseFromString(xmlText, 'text/xml')
     
-    if (!xmlDoc) {
-      throw new Error('Failed to parse XML response')
+    if (!xmlDoc || xmlDoc.getElementsByTagName('parsererror').length > 0) {
+      throw new Error('Invalid XML response from RSS feed')
     }
 
     const items = xmlDoc.getElementsByTagName('item')
     console.log(`Found ${items.length} items in RSS feed`)
 
     const posts = Array.from(items).map(item => ({
-      guid: item.querySelector('guid')?.textContent || crypto.randomUUID(),
-      title: item.querySelector('title')?.textContent || 'Untitled',
-      link: item.querySelector('link')?.textContent || null,
-      pub_date: item.querySelector('pubDate')?.textContent || new Date().toISOString(),
-      content: item.querySelector('description')?.textContent || '',
-      excerpt: (item.querySelector('description')?.textContent || '').substring(0, 150) + '...',
-      category: item.querySelector('category')?.textContent || 'Uncategorized',
+      guid: item.getElementsByTagName('guid')[0]?.textContent || crypto.randomUUID(),
+      title: item.getElementsByTagName('title')[0]?.textContent || 'Untitled',
+      link: item.getElementsByTagName('link')[0]?.textContent || null,
+      pub_date: item.getElementsByTagName('pubDate')[0]?.textContent || new Date().toISOString(),
+      content: item.getElementsByTagName('description')[0]?.textContent || '',
+      excerpt: (item.getElementsByTagName('description')[0]?.textContent || '').substring(0, 150) + '...',
+      category: item.getElementsByTagName('category')[0]?.textContent || 'Uncategorized',
     }))
 
     console.log(`Processing ${posts.length} posts`)
 
     // Update posts in database
+    let successCount = 0
     for (const post of posts) {
-      const { error: upsertError } = await supabaseClient
-        .from('posts')
-        .upsert(
-          {
-            guid: post.guid,
-            title: post.title,
-            link: post.link,
-            date: new Date(post.pub_date).toISOString(),
-            content: post.content,
-            excerpt: post.excerpt,
-            category: post.category,
-          },
-          {
-            onConflict: 'guid'
-          }
-        )
+      try {
+        const { error: upsertError } = await supabaseClient
+          .from('posts')
+          .upsert(
+            {
+              guid: post.guid,
+              title: post.title,
+              link: post.link,
+              date: new Date(post.pub_date).toISOString(),
+              content: post.content,
+              excerpt: post.excerpt,
+              category: post.category,
+            },
+            {
+              onConflict: 'guid'
+            }
+          )
 
-      if (upsertError) {
-        console.error('Error upserting post:', upsertError)
+        if (upsertError) {
+          console.error('Error upserting post:', upsertError)
+        } else {
+          successCount++
+        }
+      } catch (error) {
+        console.error('Error processing post:', error)
       }
     }
+
+    console.log(`Successfully processed ${successCount} out of ${posts.length} posts`)
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'Posts updated successfully', 
-        count: posts.length 
+        count: successCount 
       }),
       {
         headers: { 
