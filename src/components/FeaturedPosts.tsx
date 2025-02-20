@@ -14,7 +14,7 @@ interface Post {
 }
 
 const FeaturedPosts = () => {
-  const { data: featuredPosts, isLoading } = useQuery({
+  const { data: featuredPosts } = useQuery({
     queryKey: ['featuredPosts'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -30,11 +30,7 @@ const FeaturedPosts = () => {
     refetchOnWindowFocus: true
   });
 
-  if (isLoading || !featuredPosts) {
-    return null;
-  }
-
-  if (featuredPosts.length === 0) {
+  if (!featuredPosts || featuredPosts.length === 0) {
     return null;
   }
 
