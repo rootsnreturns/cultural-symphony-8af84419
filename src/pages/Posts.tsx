@@ -17,7 +17,7 @@ interface Post {
 const Posts = () => {
   const { toast } = useToast();
 
-  const { data: posts, isLoading, refetch } = useQuery({
+  const { data: posts, isLoading, isError, refetch } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
       console.log('Fetching posts from database');
@@ -51,10 +51,12 @@ const Posts = () => {
           });
         } else {
           await refetch();
-          toast({
-            title: "Posts updated",
-            description: `Successfully fetched ${(data as any)?.count || 0} new posts.`,
-          });
+          if (data?.count > 0) {
+            toast({
+              title: "Posts updated",
+              description: `Successfully fetched ${data.count} new posts.`,
+            });
+          }
         }
       } catch (error) {
         console.error('Error in fetchRSS:', error);
@@ -73,6 +75,17 @@ const Posts = () => {
     const interval = setInterval(fetchRSS, 15 * 60 * 1000);
     return () => clearInterval(interval);
   }, [refetch, toast]);
+
+  if (isError) {
+    return (
+      <div className="min-h-screen bg-black pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-12">Stories</h1>
+          <div className="text-red-500 text-center">Error loading posts. Please try again later.</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black pt-20">
