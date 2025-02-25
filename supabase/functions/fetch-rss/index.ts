@@ -1,7 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
-import { parse } from "npm:rss-to-json";
+import { parseFeed } from "https://deno.land/x/rss@1.0.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -29,17 +29,23 @@ serve(async (req) => {
     const feedUrl = "https://rss.beehiiv.com/feeds/O10YsDPvqE.xml";
     console.log('Fetching RSS feed from:', feedUrl);
 
-    const feed = await parse(feedUrl);
-    console.log(`Found ${feed.items.length} items in feed`);
+    const response = await fetch(feedUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch RSS feed: ${response.status}`);
+    }
 
-    const updates = feed.items.map(item => ({
-      guid: item.id || item.link,
-      title: item.title,
-      link: item.link,
-      date: new Date(item.published || Date.now()).toISOString(),
-      content: item.content || item.description || '',
-      excerpt: (item.description || '').replace(/<[^>]*>/g, '').substring(0, 150) + '...',
-      category: (item.category && item.category[0]) || 'General'
+    const xml = await response.text();
+    const feed = await parseFeed(xml);
+    console.log(`Found ${feed.entries.length} items in feed`);
+
+    const updates = feed.entries.map(entry => ({
+      guid: entry.id || entry.links[0]?.href,
+      title: entry.title?.value || 'Untitled',
+      link: entry.links[0]?.href || null,
+      date: new Date(entry.published || entry.updated || Date.now()).toISOString(),
+      content: entry.content?.value || entry.description?.value || '',
+      excerpt: (entry.description?.value || '').replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+      category: entry.categories?.[0]?.term || 'General'
     }));
 
     console.log(`Preparing to upsert ${updates.length} posts`);
