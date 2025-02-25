@@ -2,7 +2,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
 import { LoadingSpinner } from "@/components/ui/loading";
 
 interface Post {
@@ -15,8 +14,6 @@ interface Post {
 }
 
 const Posts = () => {
-  const { toast } = useToast();
-
   const { data: posts, isLoading, isError, refetch } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
@@ -39,32 +36,10 @@ const Posts = () => {
     const fetchRSS = async () => {
       console.log('Initiating RSS fetch');
       try {
-        const { data, error } = await supabase.functions.invoke('fetch-rss');
-        console.log('RSS fetch response:', data);
-        
-        if (error) {
-          console.error('Error fetching RSS:', error);
-          toast({
-            title: "Error fetching posts",
-            description: "There was an error fetching the latest posts. Please try again later.",
-            variant: "destructive"
-          });
-        } else {
-          await refetch();
-          if (data?.count > 0) {
-            toast({
-              title: "Posts updated",
-              description: `Successfully fetched ${data.count} new posts.`,
-            });
-          }
-        }
+        await supabase.functions.invoke('fetch-rss');
+        await refetch();
       } catch (error) {
         console.error('Error in fetchRSS:', error);
-        toast({
-          title: "Error fetching posts",
-          description: "There was an error fetching the latest posts. Please try again later.",
-          variant: "destructive"
-        });
       }
     };
 
@@ -74,7 +49,7 @@ const Posts = () => {
     // Set up periodic fetching every 15 minutes
     const interval = setInterval(fetchRSS, 15 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [refetch, toast]);
+  }, [refetch]);
 
   if (isError) {
     return (
