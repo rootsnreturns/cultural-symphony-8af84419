@@ -1,7 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
-import { parseFeed } from "https://deno.land/x/rss@1.0.0/mod.ts";
+import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -35,18 +35,32 @@ serve(async (req) => {
     }
 
     const xml = await response.text();
-    const feed = await parseFeed(xml);
-    console.log(`Found ${feed.entries.length} items in feed`);
+    const doc = new DOMParser().parseFromString(xml, 'text/xml');
+    if (!doc) {
+      throw new Error('Failed to parse XML');
+    }
 
-    const updates = feed.entries.map(entry => ({
-      guid: entry.id || entry.links[0]?.href,
-      title: entry.title?.value || 'Untitled',
-      link: entry.links[0]?.href || null,
-      date: new Date(entry.published || entry.updated || Date.now()).toISOString(),
-      content: entry.content?.value || entry.description?.value || '',
-      excerpt: (entry.description?.value || '').replace(/<[^>]*>/g, '').substring(0, 150) + '...',
-      category: entry.categories?.[0]?.term || 'General'
-    }));
+    const items = Array.from(doc.querySelectorAll('item'));
+    console.log(`Found ${items.length} items in feed`);
+
+    const updates = items.map(item => {
+      const title = item.querySelector('title')?.textContent || 'Untitled';
+      const link = item.querySelector('link')?.textContent || null;
+      const guid = item.querySelector('guid')?.textContent || link;
+      const pubDate = item.querySelector('pubDate')?.textContent;
+      const description = item.querySelector('description')?.textContent || '';
+      const category = item.querySelector('category')?.textContent || 'General';
+
+      return {
+        guid,
+        title,
+        link,
+        date: new Date(pubDate || Date.now()).toISOString(),
+        content: description,
+        excerpt: description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+        category
+      };
+    });
 
     console.log(`Preparing to upsert ${updates.length} posts`);
 
