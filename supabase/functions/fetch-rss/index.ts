@@ -43,7 +43,7 @@ serve(async (req) => {
     const items = Array.from(doc.querySelectorAll('item'));
     console.log(`Found ${items.length} items in feed`);
 
-    const updates = items.map(item => {
+    const updates = items.map((item, index) => {
       const title = item.querySelector('title')?.textContent || 'Untitled';
       const link = item.querySelector('link')?.textContent || null;
       const guid = item.querySelector('guid')?.textContent || link;
@@ -58,7 +58,8 @@ serve(async (req) => {
         date: new Date(pubDate || Date.now()).toISOString(),
         content: description,
         excerpt: description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
-        category
+        category,
+        is_featured: index < 3 // Mark the first 3 posts as featured
       };
     });
 
