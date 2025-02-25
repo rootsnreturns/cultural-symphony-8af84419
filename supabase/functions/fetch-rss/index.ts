@@ -1,7 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
-import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
+import { parse } from "https://deno.land/x/xml@2.1.3/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,80 +9,52 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
+    console.log('Starting RSS fetch process');
+    
     // Initialize Supabase client
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    );
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Missing Supabase credentials');
+    }
+
+    const supabaseAdmin = createClient(supabaseUrl, supabaseKey);
+    
     const feedUrl = "https://rss.beehiiv.com/feeds/O10YsDPvqE.xml";
-    console.log('Starting RSS fetch from:', feedUrl);
+    console.log('Fetching RSS feed from:', feedUrl);
 
-    // Fetch RSS feed
     const response = await fetch(feedUrl);
     if (!response.ok) {
-      throw new Error(`RSS feed fetch failed with status: ${response.status}`);
+      throw new Error(`Failed to fetch RSS feed: ${response.status}`);
     }
 
     const xmlText = await response.text();
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+    console.log('Received XML response, parsing...');
 
-    if (!xmlDoc) {
-      throw new Error("Failed to parse XML document");
-    }
+    const parsed = parse(xmlText);
+    const channel = parsed.rss.channel;
+    const items = Array.isArray(channel.item) ? channel.item : [channel.item];
 
-    const items = xmlDoc.getElementsByTagName("item");
-    console.log(`Processing ${items.length} RSS items`);
+    console.log(`Found ${items.length} items in feed`);
 
-    const updates = [];
-    for (const item of Array.from(items)) {
-      const guid = item.getElementsByTagName('guid')[0]?.textContent;
-      const title = item.getElementsByTagName('title')[0]?.textContent;
+    const updates = items.map(item => ({
+      guid: item.guid?._text || item.link._text,
+      title: item.title._text,
+      link: item.link._text,
+      date: new Date(item.pubDate?._text || Date.now()).toISOString(),
+      content: item.description?._text || '',
+      excerpt: (item.description?._text || '').replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+      category: item.category?._text || 'General'
+    }));
 
-      if (!guid || !title) {
-        console.log('Skipping item due to missing guid or title');
-        continue;
-      }
+    console.log(`Preparing to upsert ${updates.length} posts`);
 
-      const link = item.getElementsByTagName('link')[0]?.textContent || null;
-      const description = item.getElementsByTagName('description')[0]?.textContent || '';
-      const category = item.getElementsByTagName('category')[0]?.textContent || 'General';
-      const pubDate = item.getElementsByTagName('pubDate')[0]?.textContent;
-
-      // Clean excerpt from HTML
-      const tempDiv = parser.parseFromString(description, 'text/html');
-      const textContent = tempDiv?.documentElement?.textContent || '';
-      const excerpt = textContent.substring(0, 150) + '...';
-
-      const date = pubDate ? new Date(pubDate).toISOString() : new Date().toISOString();
-
-      updates.push({
-        guid,
-        title,
-        link,
-        date,
-        content: description,
-        excerpt,
-        category
-      });
-    }
-
-    console.log(`Attempting to upsert ${updates.length} posts`);
-
-    // Batch upsert all posts
     const { error: upsertError } = await supabaseAdmin
       .from('posts')
       .upsert(updates, {
@@ -90,8 +62,11 @@ serve(async (req) => {
       });
 
     if (upsertError) {
+      console.error('Error upserting posts:', upsertError);
       throw upsertError;
     }
+
+    console.log('Successfully updated posts');
 
     return new Response(
       JSON.stringify({
@@ -120,7 +95,7 @@ serve(async (req) => {
           ...corsHeaders,
           'Content-Type': 'application/json'
         },
-        status: 200 // Return 200 even for errors to prevent function failure
+        status: 200
       }
     );
   }

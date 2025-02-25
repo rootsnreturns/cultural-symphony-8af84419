@@ -20,20 +20,27 @@ const Posts = () => {
   const { data: posts, isLoading, refetch } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
+      console.log('Fetching posts from database');
       const { data, error } = await supabase
         .from('posts')
         .select('*')
         .order('date', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching posts:', error);
+        throw error;
+      }
+      console.log('Retrieved posts:', data?.length || 0);
       return data as Post[];
     }
   });
 
   useEffect(() => {
     const fetchRSS = async () => {
+      console.log('Initiating RSS fetch');
       try {
         const { data, error } = await supabase.functions.invoke('fetch-rss');
+        console.log('RSS fetch response:', data);
         
         if (error) {
           console.error('Error fetching RSS:', error);
@@ -50,7 +57,7 @@ const Posts = () => {
           });
         }
       } catch (error) {
-        console.error('Error fetching RSS:', error);
+        console.error('Error in fetchRSS:', error);
         toast({
           title: "Error fetching posts",
           description: "There was an error fetching the latest posts. Please try again later.",
