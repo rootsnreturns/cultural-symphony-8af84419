@@ -8,7 +8,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative h-screen flex items-center justify-center overflow-hidden bg-secondary">
+    <div className="relative h-[120vh] md:h-screen flex items-center justify-center overflow-hidden bg-secondary">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/40 z-10" />
         <img
