@@ -1,8 +1,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/ui/loading";
+import { toast } from "@/components/ui/use-toast";
 
 interface Post {
   id: string;
@@ -14,6 +15,8 @@ interface Post {
 }
 
 const Posts = () => {
+  const [isFetching, setIsFetching] = useState(false);
+
   const { data: posts, isLoading, isError, refetch } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
@@ -34,22 +37,49 @@ const Posts = () => {
 
   useEffect(() => {
     const fetchRSS = async () => {
+      if (isFetching) return;
+      
       console.log('Initiating RSS fetch');
+      setIsFetching(true);
       try {
-        await supabase.functions.invoke('fetch-rss');
-        await refetch();
+        const response = await supabase.functions.invoke('fetch-rss');
+        console.log('RSS fetch response:', response);
+        
+        if (response.error) {
+          console.error('Error in RSS fetch:', response.error);
+          toast({
+            title: "Error fetching latest posts",
+            description: "Couldn't get the latest content. Please try again later.",
+            variant: "destructive"
+          });
+        } else {
+          await refetch();
+          toast({
+            title: "Posts updated",
+            description: "The latest posts have been fetched successfully."
+          });
+        }
       } catch (error) {
         console.error('Error in fetchRSS:', error);
+        toast({
+          title: "Connection error",
+          description: "Couldn't connect to the RSS service. Please try again later.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsFetching(false);
       }
     };
 
-    // Initial fetch
-    fetchRSS();
+    // Initial fetch only if no posts
+    if (!posts || posts.length === 0) {
+      fetchRSS();
+    }
     
     // Set up periodic fetching every 15 minutes
     const interval = setInterval(fetchRSS, 15 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [refetch]);
+  }, [refetch, posts, isFetching]);
 
   if (isError) {
     return (
@@ -66,10 +96,19 @@ const Posts = () => {
     <div className="min-h-screen bg-black pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-12">Stories</h1>
-        {isLoading ? (
+        {isLoading || isFetching ? (
           <LoadingSpinner />
         ) : !posts || posts.length === 0 ? (
-          <p className="text-gray-400 text-center">No posts available yet.</p>
+          <div className="text-center">
+            <p className="text-gray-400 mb-4">No posts available yet.</p>
+            <button 
+              onClick={() => fetchRSS()}
+              className="px-4 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors"
+              disabled={isFetching}
+            >
+              {isFetching ? 'Fetching...' : 'Fetch Latest Posts'}
+            </button>
+          </div>
         ) : (
           <div className="grid md:grid-cols-3 gap-6">
             {posts.map((post) => (

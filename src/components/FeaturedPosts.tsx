@@ -3,6 +3,8 @@ import { Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { LoadingSpinner } from "@/components/ui/loading";
+import { useEffect, useState } from "react";
+import { toast } from "@/components/ui/use-toast";
 
 interface Post {
   id: string;
@@ -14,7 +16,9 @@ interface Post {
 }
 
 const FeaturedPosts = () => {
-  const { data: posts, isLoading } = useQuery({
+  const [isFetching, setIsFetching] = useState(false);
+
+  const { data: posts, isLoading, refetch } = useQuery({
     queryKey: ['featuredPosts'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -28,7 +32,35 @@ const FeaturedPosts = () => {
     }
   });
 
-  if (isLoading) {
+  useEffect(() => {
+    const fetchRSS = async () => {
+      if (isFetching) return;
+      
+      console.log('Initiating RSS fetch from FeaturedPosts');
+      setIsFetching(true);
+      try {
+        const response = await supabase.functions.invoke('fetch-rss');
+        console.log('RSS fetch response:', response);
+        
+        if (response.error) {
+          console.error('Error in RSS fetch:', response.error);
+        } else {
+          await refetch();
+        }
+      } catch (error) {
+        console.error('Error in fetchRSS:', error);
+      } finally {
+        setIsFetching(false);
+      }
+    };
+
+    // Initial fetch only if no posts
+    if (!posts || posts.length === 0) {
+      fetchRSS();
+    }
+  }, [refetch, posts, isFetching]);
+
+  if (isLoading || isFetching) {
     return (
       <section className="py-16 bg-black">
         <div className="container mx-auto px-4">
