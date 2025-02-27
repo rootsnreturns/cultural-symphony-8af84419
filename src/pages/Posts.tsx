@@ -35,42 +35,43 @@ const Posts = () => {
     }
   });
 
-  useEffect(() => {
-    const fetchRSS = async () => {
-      if (isFetching) return;
+  // Define fetchRSS outside useEffect so it can be used in the button onClick
+  const fetchRSS = async () => {
+    if (isFetching) return;
+    
+    console.log('Initiating RSS fetch');
+    setIsFetching(true);
+    try {
+      const response = await supabase.functions.invoke('fetch-rss');
+      console.log('RSS fetch response:', response);
       
-      console.log('Initiating RSS fetch');
-      setIsFetching(true);
-      try {
-        const response = await supabase.functions.invoke('fetch-rss');
-        console.log('RSS fetch response:', response);
-        
-        if (response.error) {
-          console.error('Error in RSS fetch:', response.error);
-          toast({
-            title: "Error fetching latest posts",
-            description: "Couldn't get the latest content. Please try again later.",
-            variant: "destructive"
-          });
-        } else {
-          await refetch();
-          toast({
-            title: "Posts updated",
-            description: "The latest posts have been fetched successfully."
-          });
-        }
-      } catch (error) {
-        console.error('Error in fetchRSS:', error);
+      if (response.error) {
+        console.error('Error in RSS fetch:', response.error);
         toast({
-          title: "Connection error",
-          description: "Couldn't connect to the RSS service. Please try again later.",
+          title: "Error fetching latest posts",
+          description: "Couldn't get the latest content. Please try again later.",
           variant: "destructive"
         });
-      } finally {
-        setIsFetching(false);
+      } else {
+        await refetch();
+        toast({
+          title: "Posts updated",
+          description: "The latest posts have been fetched successfully."
+        });
       }
-    };
+    } catch (error) {
+      console.error('Error in fetchRSS:', error);
+      toast({
+        title: "Connection error",
+        description: "Couldn't connect to the RSS service. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
+  useEffect(() => {
     // Initial fetch only if no posts
     if (!posts || posts.length === 0) {
       fetchRSS();

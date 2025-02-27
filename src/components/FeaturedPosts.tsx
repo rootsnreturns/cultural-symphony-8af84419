@@ -32,33 +32,34 @@ const FeaturedPosts = () => {
     }
   });
 
-  useEffect(() => {
-    const fetchRSS = async () => {
-      if (isFetching) return;
+  // Define fetchRSS outside useEffect for better scope
+  const fetchRSS = async () => {
+    if (isFetching) return;
+    
+    console.log('Initiating RSS fetch from FeaturedPosts');
+    setIsFetching(true);
+    try {
+      const response = await supabase.functions.invoke('fetch-rss');
+      console.log('RSS fetch response:', response);
       
-      console.log('Initiating RSS fetch from FeaturedPosts');
-      setIsFetching(true);
-      try {
-        const response = await supabase.functions.invoke('fetch-rss');
-        console.log('RSS fetch response:', response);
-        
-        if (response.error) {
-          console.error('Error in RSS fetch:', response.error);
-        } else {
-          await refetch();
-        }
-      } catch (error) {
-        console.error('Error in fetchRSS:', error);
-      } finally {
-        setIsFetching(false);
+      if (response.error) {
+        console.error('Error in RSS fetch:', response.error);
+      } else {
+        await refetch();
       }
-    };
+    } catch (error) {
+      console.error('Error in fetchRSS:', error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
 
+  useEffect(() => {
     // Initial fetch only if no posts
     if (!posts || posts.length === 0) {
       fetchRSS();
     }
-  }, [refetch, posts, isFetching]);
+  }, [posts, isFetching]);
 
   if (isLoading || isFetching) {
     return (
