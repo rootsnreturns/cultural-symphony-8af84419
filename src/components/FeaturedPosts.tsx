@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { LoadingSpinner } from "@/components/ui/loading";
 import { useEffect, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 interface Post {
   id: string;
@@ -17,6 +18,7 @@ interface Post {
 
 const FeaturedPosts = () => {
   const [isFetching, setIsFetching] = useState(false);
+  const { t } = useTranslation();
 
   const { data: posts, isLoading, refetch } = useQuery({
     queryKey: ['featuredPosts'],
@@ -67,7 +69,7 @@ const FeaturedPosts = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-2 mb-8 justify-center">
             <Star className="text-primary w-6 h-6" />
-            <h2 className="text-3xl font-bold text-white">Featured Posts</h2>
+            <h2 className="text-3xl font-bold text-white">{t("featuredPosts.title")}</h2>
           </div>
           <LoadingSpinner />
         </div>
@@ -84,7 +86,7 @@ const FeaturedPosts = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-2 mb-8 justify-center">
           <Star className="text-primary w-6 h-6" />
-          <h2 className="text-3xl font-bold text-white">Featured Posts</h2>
+          <h2 className="text-3xl font-bold text-white">{t("featuredPosts.title")}</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {posts.map((post) => (

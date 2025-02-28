@@ -1,8 +1,11 @@
 
 import { Link } from "react-router-dom";
 import { Linkedin } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
+  
   return (
     <footer className="bg-black border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -14,38 +17,38 @@ const Footer = () => {
               className="h-12 w-auto mb-4"
             />
             <p className="text-gray-400">
-              Connecting Africa's present to its future through powerful stories and actionable insights.
+              {t("footer.description")}
             </p>
           </div>
           
           <div>
-            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-white font-semibold mb-4">{t("footer.quickLinks")}</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/archives" className="text-gray-400 hover:text-primary">
-                  Archives
+                  {t("footer.archives")}
                 </Link>
               </li>
               <li>
                 <Link to="/sponsor" className="text-gray-400 hover:text-primary">
-                  Sponsor
+                  {t("footer.sponsor")}
                 </Link>
               </li>
               <li>
                 <a href="https://rss.beehiiv.com/feeds/O10YsDPvqE.xml" className="text-gray-400 hover:text-primary" target="_blank" rel="noopener noreferrer">
-                  RSS
+                  {t("footer.rss")}
                 </a>
               </li>
               <li>
                 <Link to="/get-involved" className="text-gray-400 hover:text-primary">
-                  Get Involved
+                  {t("footer.getInvolved")}
                 </Link>
               </li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-white font-semibold mb-4">Connect</h3>
+            <h3 className="text-white font-semibold mb-4">{t("footer.connect")}</h3>
             <div className="flex space-x-4">
               <a href="https://x.com/rootsnreturns" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary">
                 <svg
@@ -64,16 +67,16 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-white font-semibold mb-4">Contact</h3>
+            <h3 className="text-white font-semibold mb-4">{t("footer.contact")}</h3>
             <p className="text-gray-400">
-              Email: info@rootsnreturns.com
+              {t("footer.email")}
             </p>
           </div>
         </div>
         
         <div className="mt-8 pt-8 border-t border-gray-800">
           <p className="text-gray-400 text-center">
-            © 2025 Roots N Returns. All Rights Reserved.
+            {t("footer.rights")}
           </p>
         </div>
       </div>

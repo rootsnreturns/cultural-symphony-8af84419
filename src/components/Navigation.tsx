@@ -9,25 +9,28 @@ import {
   DrawerTrigger,
   DrawerClose,
 } from "@/components/ui/drawer";
+import { useTranslation } from "react-i18next";
+import LanguageSelector from "./LanguageSelector";
 
 const Navigation = () => {
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
 
   const navLinks = [
     {
       to: "/about",
       icon: <Info className="h-4 w-4" />,
-      label: "About",
+      label: t("navigation.about"),
     },
     {
       to: "/posts",
       icon: <BookOpen className="h-4 w-4" />,
-      label: "Stories",
+      label: t("navigation.stories"),
     },
     {
       to: "/get-involved",
       icon: <Handshake className="h-4 w-4" />,
-      label: "Get Involved",
+      label: t("navigation.getInvolved"),
     },
   ];
 
@@ -56,9 +59,12 @@ const Navigation = () => {
               to="/sponsor" 
               className="bg-white text-black hover:bg-gray-100 px-4 py-2 rounded-md transition-colors text-center"
             >
-              Sponsor
+              {t("navigation.sponsor")}
             </Link>
           </DrawerClose>
+          <div className="pt-2">
+            <LanguageSelector />
+          </div>
         </div>
       </DrawerContent>
     </Drawer>
@@ -80,10 +86,13 @@ const Navigation = () => {
           
           {/* Mobile Menu */}
           {isMobile ? (
-            <MobileMenu />
+            <div className="flex items-center">
+              <LanguageSelector />
+              <MobileMenu />
+            </div>
           ) : (
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
+              <div className="ml-10 flex items-center space-x-4">
                 {navLinks.map((link) => (
                   <Link
                     key={link.to}
@@ -98,8 +107,9 @@ const Navigation = () => {
                   to="/sponsor" 
                   className="bg-white text-black hover:bg-gray-100 px-4 py-2 rounded-md transition-colors"
                 >
-                  Sponsor
+                  {t("navigation.sponsor")}
                 </Link>
+                <LanguageSelector />
               </div>
             </div>
           )}

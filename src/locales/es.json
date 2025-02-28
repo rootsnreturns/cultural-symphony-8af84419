@@ -1,0 +1,31 @@
+
+{
+  "navigation": {
+    "about": "Acerca de",
+    "stories": "Historias",
+    "getInvolved": "Participar",
+    "sponsor": "Patrocinar"
+  },
+  "hero": {
+    "stayConnected": "Mantente Conectado.",
+    "storiesOf": "Historias de Transformación",
+    "fromAfrica": "de África y Más Allá",
+    "joinOur": "Únete a nuestra comunidad de agentes de cambio y recibe historias seleccionadas, recursos prácticos y actualizaciones exclusivas.",
+    "subscribeNow": "Suscríbete Ahora"
+  },
+  "featuredPosts": {
+    "title": "Publicaciones Destacadas"
+  },
+  "footer": {
+    "description": "Conectando el presente de África con su futuro a través de historias poderosas y perspectivas accionables.",
+    "quickLinks": "Enlaces Rápidos",
+    "archives": "Archivos",
+    "sponsor": "Patrocinar",
+    "rss": "RSS",
+    "getInvolved": "Participar",
+    "connect": "Conectar",
+    "contact": "Contacto",
+    "email": "Correo: info@rootsnreturns.com",
+    "rights": "© 2025 Roots N Returns. Todos los Derechos Reservados."
+  }
+}

@@ -1,8 +1,11 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const Hero = () => {
+  const { t } = useTranslation();
+
   const handleSubscribe = () => {
     window.open('https://rootsnreturns.beehiiv.com/subscribe', '_blank');
   };
@@ -20,19 +23,19 @@ const Hero = () => {
       
       <div className="container relative mx-auto px-4 z-20 text-center max-w-4xl translate-y-12">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-          Stay Connected.<br />
-          <span className="text-primary">Stories of Transformation</span><br />
-          from Africa and Beyond
+          {t("hero.stayConnected")}<br />
+          <span className="text-primary">{t("hero.storiesOf")}</span><br />
+          {t("hero.fromAfrica")}
         </h1>
         <p className="text-xl md:text-2xl text-gray-200 mb-12 mx-auto">
-          Join our community of changemakers and receive curated stories, actionable resources, and exclusive updates.
+          {t("hero.joinOur")}
         </p>
         <Button 
           size="lg" 
           className="bg-primary hover:bg-primary/90 text-lg"
           onClick={handleSubscribe}
         >
-          Subscribe Now <ArrowRight className="ml-2 h-5 w-5" />
+          {t("hero.subscribeNow")} <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
       </div>
     </div>

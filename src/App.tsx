@@ -15,6 +15,7 @@ import Archives from "./pages/Archives";
 import Sponsor from "./pages/Sponsor";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import "./i18n"; // Import i18n configuration
 
 const queryClient = new QueryClient({
   defaultOptions: {

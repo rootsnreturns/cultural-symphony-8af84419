@@ -1,0 +1,31 @@
+
+{
+  "navigation": {
+    "about": "About",
+    "stories": "Stories",
+    "getInvolved": "Get Involved",
+    "sponsor": "Sponsor"
+  },
+  "hero": {
+    "stayConnected": "Stay Connected.",
+    "storiesOf": "Stories of Transformation",
+    "fromAfrica": "from Africa and Beyond",
+    "joinOur": "Join our community of changemakers and receive curated stories, actionable resources, and exclusive updates.",
+    "subscribeNow": "Subscribe Now"
+  },
+  "featuredPosts": {
+    "title": "Featured Posts"
+  },
+  "footer": {
+    "description": "Connecting Africa's present to its future through powerful stories and actionable insights.",
+    "quickLinks": "Quick Links",
+    "archives": "Archives",
+    "sponsor": "Sponsor",
+    "rss": "RSS",
+    "getInvolved": "Get Involved",
+    "connect": "Connect",
+    "contact": "Contact",
+    "email": "Email: info@rootsnreturns.com",
+    "rights": "© 2025 Roots N Returns. All Rights Reserved."
+  }
+}
