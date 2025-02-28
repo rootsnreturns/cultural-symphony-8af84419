@@ -1,12 +1,27 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
-import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Simple function to extract content between XML tags
+function extractTag(xml: string, tag: string): string | null {
+  const regex = new RegExp(`<${tag}[^>]*>(.*?)<\/${tag}>`, 'is');
+  const match = xml.match(regex);
+  return match ? match[1].trim() : null;
+}
+
+// Extract CDATA content
+function extractCDATA(text: string): string {
+  if (!text) return '';
+  if (text.includes('<![CDATA[')) {
+    return text.replace(/<!\[CDATA\[(.*?)\]\]>/s, '$1');
+  }
+  return text;
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -35,29 +50,55 @@ serve(async (req) => {
     }
 
     const xml = await response.text();
-    const doc = new DOMParser().parseFromString(xml, 'text/xml');
-    if (!doc) {
-      throw new Error('Failed to parse XML');
+    console.log('Received XML, length:', xml.length);
+    
+    // Extract all items using regex instead of DOM parsing
+    const itemsRegex = /<item>([\s\S]*?)<\/item>/g;
+    const itemsMatches = [...xml.matchAll(itemsRegex)];
+    
+    if (itemsMatches.length === 0) {
+      console.log('No items found in feed');
+      // Return sample data for debugging if no items found
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'No items found in feed',
+          xmlLength: xml.length,
+          xmlPreview: xml.substring(0, 200) // First 200 chars for debugging
+        }),
+        {
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
     }
+    
+    console.log(`Found ${itemsMatches.length} items in feed`);
 
-    const items = Array.from(doc.querySelectorAll('item'));
-    console.log(`Found ${items.length} items in feed`);
-
-    const updates = items.map((item, index) => {
-      const title = item.querySelector('title')?.textContent || 'Untitled';
-      const link = item.querySelector('link')?.textContent || null;
-      const guid = item.querySelector('guid')?.textContent || link;
-      const pubDate = item.querySelector('pubDate')?.textContent;
-      const description = item.querySelector('description')?.textContent || '';
-      const category = item.querySelector('category')?.textContent || 'General';
-
+    // Process each item to extract relevant data
+    const updates = itemsMatches.map((match, index) => {
+      const itemXml = match[0];
+      
+      const title = extractTag(itemXml, 'title');
+      const link = extractTag(itemXml, 'link');
+      const guid = extractTag(itemXml, 'guid') || link;
+      const pubDate = extractTag(itemXml, 'pubDate');
+      const description = extractCDATA(extractTag(itemXml, 'description') || '');
+      const category = extractTag(itemXml, 'category') || 'General';
+      
+      // Clean description text for excerpt
+      const textDescription = description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      const excerpt = textDescription.substring(0, 150) + (textDescription.length > 150 ? '...' : '');
+      
       return {
         guid,
         title,
         link,
-        date: new Date(pubDate || Date.now()).toISOString(),
+        date: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
         content: description,
-        excerpt: description.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+        excerpt,
         category,
         is_featured: index < 3 // Mark the first 3 posts as featured
       };
@@ -65,6 +106,7 @@ serve(async (req) => {
 
     console.log(`Preparing to upsert ${updates.length} posts`);
 
+    // Insert into database
     const { error: upsertError } = await supabaseAdmin
       .from('posts')
       .upsert(updates, {
