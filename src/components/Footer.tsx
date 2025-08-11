@@ -25,6 +25,11 @@ const Footer = () => {
             <h3 className="text-white font-semibold mb-4">{t("footer.quickLinks")}</h3>
             <ul className="space-y-2">
               <li>
+                <Link to="/posts" className="text-gray-400 hover:text-primary">
+                  {t("navigation.stories")}
+                </Link>
+              </li>
+              <li>
                 <Link to="/archives" className="text-gray-400 hover:text-primary">
                   {t("footer.archives")}
                 </Link>

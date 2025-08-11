@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { BookOpen, Handshake, Info, Menu } from "lucide-react";
+import { Info, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Drawer,
@@ -21,16 +21,6 @@ const Navigation = () => {
       to: "/about",
       icon: <Info className="h-4 w-4" />,
       label: t("navigation.about"),
-    },
-    {
-      to: "/posts",
-      icon: <BookOpen className="h-4 w-4" />,
-      label: t("navigation.stories"),
-    },
-    {
-      to: "/get-involved",
-      icon: <Handshake className="h-4 w-4" />,
-      label: t("navigation.getInvolved"),
     },
   ];
 
@@ -54,14 +44,6 @@ const Navigation = () => {
               </Link>
             </DrawerClose>
           ))}
-          <DrawerClose asChild>
-            <Link 
-              to="/sponsor" 
-              className="bg-white text-black hover:bg-gray-100 px-4 py-2 rounded-md transition-colors text-center"
-            >
-              {t("navigation.sponsor")}
-            </Link>
-          </DrawerClose>
           <div className="pt-2">
             <LanguageSelector />
           </div>
@@ -103,12 +85,6 @@ const Navigation = () => {
                     {link.label}
                   </Link>
                 ))}
-                <Link 
-                  to="/sponsor" 
-                  className="bg-white text-black hover:bg-gray-100 px-4 py-2 rounded-md transition-colors"
-                >
-                  {t("navigation.sponsor")}
-                </Link>
                 <LanguageSelector />
               </div>
             </div>
